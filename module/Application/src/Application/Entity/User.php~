@@ -1,0 +1,45 @@
+<?php
+namespace Application\Entity;
+use Doctrine\ORM\Mapping as ORM;
+use ZfcUser\Entity\User as ZfcUser;
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="users", schema="public")
+ **/
+
+class User extends ZfcUser {
+        
+    /** 
+     * @ORM\ManyToOne(targetEntity="Enterprise", inversedBy="users", cascade={"all"})
+     * @ORM\JoinColumn(name="enterprise_id", referencedColumnName="id")
+     */
+    protected $enterprise;
+    
+    /** @ORM\Column(type="datetime") */
+    protected $last_updated;
+    
+    /** @ORM\Column(type="datetime", options={"default": 0})*/
+    protected $created;
+    
+    protected $tableName  = 'users';
+
+    // getters/setters
+    
+    public function __construct(){
+        $this->created = new \DateTime();
+    }
+
+    /**
+     * Stub to prevent auto-generation
+     */
+    private function setLastUpdated()
+    {
+    }
+
+    /**
+     * Stub to prevent auto-generation
+     */
+    private function setCreated()
+    {
+    }
+}
