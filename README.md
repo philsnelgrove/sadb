@@ -11,7 +11,7 @@ Next, the DB connections must be set up.  The files where this happens are;
 <strong>config/autoload/global.php</strong>
 <strong>config/doctrine-config.php</strong>
 The file <strong>config/autoload/doctrine.local.php</strong> must be created; it requires the following contents, adjusted appropriately for the datasource:
-
+```
 <?php
 return array(
     'service_manager' => array(
@@ -46,7 +46,8 @@ return array(
             ),
         ),
     ),
-); 
+);
+```
 
 Next, in the datasource, a DB must be created and named accordingly (in the code above, I had connected to "sadb").  Within that DB, a blank "public" schema is required.
 
