@@ -53,6 +53,6 @@ Next, in the datasource, a DB must be created and named accordingly (in the code
 
 <b>php public/index.php migrations:migrate</b> will invoke Doctrine's schema generation, and populate the database with the appropriate tables.  <b>At this time, no fixtures are provided.</b>
 
-Next, browse to http://project_location/user, and click "register" to create a user.
+Next, browse to <strong>http://project_location/user</strong>, and click "register" to create a user.
 
 The rest of this is developmental nothing.  The index controller currently contains the logic to create a "User" record, but it isn't a valid one (IE capable of using the system), and the code must be modified with a new user name and email address each time it is run.  Be warned.

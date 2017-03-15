@@ -28,14 +28,11 @@ class Post {
      */
     protected $social_media_presence;
     
-    /** @ORM\OneToMany(targetEntity="PostLike", mappedBy="post") */
-    protected $likes;
+    /** @ORM\OneToOne(targetEntity="PostType") */
+    protected $type;
     
-    /** @ORM\OneToMany(targetEntity="PostComment", mappedBy="post") */
-    protected $comments;
-    
-    /** @ORM\OneToMany(targetEntity="PostReaction", mappedBy="post") */
-    protected $reactions;
+    /** @ORM\OneToMany(targetEntity="PostData", mappedBy="post") */
+    protected $metadata;
     
     /** @ORM\Column(type="datetime") */
     protected $last_updated;
@@ -61,195 +58,6 @@ class Post {
     }
 
     /**
-     * Set social_media_service_id
-     *
-     * @param string $id
-     *
-     * @return Post
-     */
-    public function setSocialMediaServiceId($id)
-    {
-        $this->social_media_service_id = $id;
-        $this->last_updated = new \DateTime();
-
-        return $this;
-    }
-
-    /**
-     * Get social_media_service_id
-     *
-     * @return string
-     */
-    public function getSocialMediaServiceId()
-    {
-        return $this->social_media_service_id;
-    }
-    
-    /**
-     * Set social_media_presence
-     *
-     * @param string $presence
-     *
-     * @return Post
-     */
-    public function setSocialMediaPresence($presence)
-    {
-        $this->social_media_presence = $presence;
-        $this->last_updated = new \DateTime();
-    
-        return $this;
-    }
-    
-    /**
-     * Get social_media_presence
-     *
-     * @return SocialMediaPresence
-     */
-    public function getSocialMediaPresence()
-    {
-        return $this->social_media_presence;
-    }
-    
-    /**
-     * Set title
-     *
-     * @param string $title
-     *
-     * @return Post
-     */
-    public function setTitle($title)
-    {
-        $this->title = $title;
-        $this->last_updated = new \DateTime();
-    
-        return $this;
-    }
-    
-    /**
-     * Get title
-     *
-     * @return string
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
-    
-    /**
-     * Set raw_text_content
-     *
-     * @param string $content
-     *
-     * @return Post
-     */
-    public function setRawTextContent($content)
-    {
-        $this->raw_text_content = $content;
-        $this->last_updated = new \DateTime();
-    
-        return $this;
-    }
-    
-    /**
-     * Get raw_text_content
-     *
-     * @return string
-     */
-    public function getRawTextContent()
-    {
-        return $this->raw_text_content;
-    }
-    
-    /**
-     * Set name
-     *
-     * @param string $name
-     *
-     * @return SocialMediaPresence
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-        $this->last_updated = new \DateTime();
-    
-        return $this;
-    }
-    
-    /**
-     * Get name
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-    
-    /**
-     * Increment num_likes
-     *
-     * @return Post
-     */
-    public function addLike(\Application\Entity\PostLike $like)
-    {
-        $this->likes[] = $like;
-        $this->last_updated = new \DateTime();
-    
-        return $this;
-    }
-    
-    /**
-     * Add Comment
-     *
-     * @param Comment $comment
-     *
-     * @return Post
-     */
-    public function addComment(\Application\Entity\PostComment $comment)
-    {
-        $this->comments[] = $comment;
-        $this->last_updated = new \DateTime();
-    
-        return $this;
-    }
-
-    /**
-     * Get comments
-     *
-     * @return array(Comment)
-     */
-    public function getComments()
-    {
-        return $this->comments;
-    }
-    
-    /**
-     * Add Reaction
-     *
-     * @param Reaction $reaction
-     *
-     * @return Post
-     */
-    public function addReaction(\Application\Entity\PostReaction $reaction)
-    {
-        $this->reactions[] = $reaction;
-        $this->last_updated = new \DateTime();
-    
-        return $this;
-    }
-
-    
-    /**
-     * Get reactions
-     *
-     * @return array(Reaction)
-     */
-    public function getReactions()
-    {
-        return $this->reactions;
-    }
-    
-    /**
      * Get last updated
      *
      * @return string
@@ -270,49 +78,6 @@ class Post {
     }
 
     /**
-     * Remove like
-     *
-     * @param \Application\Entity\PostLike $like
-     */
-    public function removeLike(\Application\Entity\PostLike $like)
-    {
-        $this->likes->removeElement($like);
-        $this->last_updated = new \DateTime();
-    }
-
-    /**
-     * Get likes
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getLikes()
-    {
-        return $this->likes;
-    }
-
-    /**
-     * Remove comment
-     *
-     * @param \Application\Entity\PostComment $comment
-     */
-    public function removeComment(\Application\Entity\PostComment $comment)
-    {
-        $this->comments->removeElement($comment);
-        $this->last_updated = new \DateTime();
-    }
-
-    /**
-     * Remove reaction
-     *
-     * @param \Application\Entity\PostReaction $reaction
-     */
-    public function removeReaction(\Application\Entity\PostReaction $reaction)
-    {
-        $this->reactions->removeElement($reaction);
-        $this->last_updated = new \DateTime();
-    }
-
-    /**
      * Stub to prevent auto-generation
      */
     private function setLastUpdated()
@@ -324,5 +89,153 @@ class Post {
      */
     private function setCreated()
     {
+    }
+
+    /**
+     * Set social_media_service_id
+     *
+     * @param string $socialMediaServiceId
+     * @return Post
+     */
+    public function setSocialMediaServiceId($socialMediaServiceId)
+    {
+        $this->social_media_service_id = $socialMediaServiceId;
+
+        return $this;
+    }
+
+    /**
+     * Get social_media_service_id
+     *
+     * @return string 
+     */
+    public function getSocialMediaServiceId()
+    {
+        return $this->social_media_service_id;
+    }
+
+    /**
+     * Set title
+     *
+     * @param string $title
+     * @return Post
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    /**
+     * Get title
+     *
+     * @return string 
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * Set raw_text_content
+     *
+     * @param string $rawTextContent
+     * @return Post
+     */
+    public function setRawTextContent($rawTextContent)
+    {
+        $this->raw_text_content = $rawTextContent;
+
+        return $this;
+    }
+
+    /**
+     * Get raw_text_content
+     *
+     * @return string 
+     */
+    public function getRawTextContent()
+    {
+        return $this->raw_text_content;
+    }
+
+    /**
+     * Set social_media_presence
+     *
+     * @param \Application\Entity\SocialMediaPresence $socialMediaPresence
+     * @return Post
+     */
+    public function setSocialMediaPresence(\Application\Entity\SocialMediaPresence $socialMediaPresence = null)
+    {
+        $this->social_media_presence = $socialMediaPresence;
+
+        return $this;
+    }
+
+    /**
+     * Get social_media_presence
+     *
+     * @return \Application\Entity\SocialMediaPresence 
+     */
+    public function getSocialMediaPresence()
+    {
+        return $this->social_media_presence;
+    }
+
+    /**
+     * Set type
+     *
+     * @param \Application\Entity\PostType $type
+     * @return Post
+     */
+    public function setType(\Application\Entity\PostType $type = null)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return \Application\Entity\PostType 
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * Add metadata
+     *
+     * @param \Application\Entity\PostData $metadata
+     * @return Post
+     */
+    public function addMetadatum(\Application\Entity\PostData $metadata)
+    {
+        $this->metadata[] = $metadata;
+
+        return $this;
+    }
+
+    /**
+     * Remove metadata
+     *
+     * @param \Application\Entity\PostData $metadata
+     */
+    public function removeMetadatum(\Application\Entity\PostData $metadata)
+    {
+        $this->metadata->removeElement($metadata);
+    }
+
+    /**
+     * Get metadata
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getMetadata()
+    {
+        return $this->metadata;
     }
 }
