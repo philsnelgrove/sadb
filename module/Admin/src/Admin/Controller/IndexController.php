@@ -18,7 +18,31 @@ class IndexController extends AbstractActionController
         return array();
     }
 
-    public function fooAction()
+    public function editModelAction()
+    {
+        // This shows the :controller and :action parameters in default route
+        // are working when you browse to /index/index/foo
+        return array();
+    }
+    public function socialMediaAction()
+    {
+        // This shows the :controller and :action parameters in default route
+        // are working when you browse to /index/index/foo
+        return array();
+    }
+    public function userPermissionAction()
+    {
+        // This shows the :controller and :action parameters in default route
+        // are working when you browse to /index/index/foo
+        return array();
+    }
+    public function userEditAction()
+    {
+        // This shows the :controller and :action parameters in default route
+        // are working when you browse to /index/index/foo
+        return array();
+    }
+    public function generateReportAction()
     {
         // This shows the :controller and :action parameters in default route
         // are working when you browse to /index/index/foo
