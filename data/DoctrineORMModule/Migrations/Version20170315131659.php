@@ -67,6 +67,8 @@ class Version20170315131659 extends AbstractMigration
         $this->addSql('ALTER TABLE social_media_presence ADD CONSTRAINT FK_91C204C475FB7951 FOREIGN KEY (parent_enterprise_id) REFERENCES enterprise (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE users ADD CONSTRAINT FK_1483A5E9A97D1AC3 FOREIGN KEY (enterprise_id) REFERENCES enterprise (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE post_data ADD CONSTRAINT FK_64A69468E1E19DA5 FOREIGN KEY (social_media_presence_id) REFERENCES post (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+    
+        
     }
 
     /**
@@ -112,5 +114,10 @@ class Version20170315131659 extends AbstractMigration
         $this->addSql('DROP TABLE dimension');
         $this->addSql('DROP TABLE post_type');
         $this->addSql('DROP TABLE "user"');
+    }
+    
+    public function add_dimensions()
+    {
+        // import dimensions file
     }
 }

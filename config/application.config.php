@@ -5,12 +5,12 @@ return array(
         'ZendDeveloperTools',
         'DoctrineModule',
         'DoctrineORMModule',
-        'Application',
-        'API',   
         'ZfcBase',
         'ZfcUser',
         'ZfcAdmin',
         'Admin',
+        'Application',
+        'API',
         'ZfcUserDoctrineORM',
         'BjyProfiler','Admin',
     ),
@@ -23,7 +23,7 @@ return array(
         // Module class.
         'module_paths' => array(
             './module',
-            './vendor','./module','./module',
+            './vendor',
         ),
 
         // An array of paths from which to glob configuration files after

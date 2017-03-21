@@ -121,4 +121,14 @@ return array(
             ),
         ),
     ),
+    'facebook_constants' => array(
+        'test_page' => array(
+            'app_id' => '134747733717621',
+            'app_secret' => '1cc69b4360b550ce6d7fbe47cc5adbe0',
+        ),
+        'dragons_hangout' => array(
+            'app_id' => '',
+            'app_secret' => '',
+        ),
+    )
 );

@@ -6,7 +6,6 @@
  * @copyright Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
-
 namespace Application;
 
 use Zend\Mvc\ModuleRouteListener;
@@ -14,9 +13,10 @@ use Zend\Mvc\MvcEvent;
 
 class Module
 {
+
     public function onBootstrap(MvcEvent $e)
     {
-        $eventManager        = $e->getApplication()->getEventManager();
+        $eventManager = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
     }
@@ -31,21 +31,43 @@ class Module
         return array(
             'Zend\Loader\StandardAutoloader' => array(
                 'namespaces' => array(
-                    __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
-                ),
-            ),
+                    __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__
+                )
+            )
         );
     }
+
     public function getServiceConfiguration()
     {
         return array(
             'factories' => array(
-                'db_adapter' =>  function($sm) {
+                'db_adapter' => function ($sm) {
                     $config = $sm->get('Configuration');
-                        $dbAdapter = new \Zend\Db\Adapter\Adapter($config['db']);
-                            return $dbAdapter;
-                        }
-                    ),
-                );
+                    $dbAdapter = new \Zend\Db\Adapter\Adapter($config['db']);
+                    return $dbAdapter;
+                }
+            )
+        );
+    }
+
+    public function getFormElementConfig()
+    {
+        return array(
+            'invokables' => array(
+                'DimensionForm' => 'Application\Form\DimensionForm',
+            ),
+            'initializers' => array(
+                'ObjectManagerInitializer' => function ($element, $formElements) {
+                    // look if the form implements the ObjectManagerAwareInterface
+                    if ($element instanceof ObjectManagerAwareInterface) {
+                        // locate the EntityManager using the serviceLocator
+                        $services = $formElements->getServiceLocator();
+                        $entityManager = $services->get('Doctrine\ORM\EntityManager');
+                        // set the forms EntityManager or Objectmanager, 2 names for the same thing
+                        $element->setObjectManager($entityManager);
+                    }
+                }
+            )
+        );
     }
 }
