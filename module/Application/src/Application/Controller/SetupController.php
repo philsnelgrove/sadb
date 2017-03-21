@@ -4,6 +4,8 @@ namespace Application\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Application\Entity\Dimension;
+use Application\Entity\User;
+use Application\Entity\Enterprise;
 
 /**
  * SetupController
@@ -102,16 +104,11 @@ class SetupController extends BaseController
             "post_video_views_10s_sound_on",
             "post_video_views_sound_on"
         );
-//         $repository = $this->getEntityManager()->getRepository('Application\Entity\Dimension');
-//         $testDimension = $repository->find('name'=>'post_story_adds_unique');
         $em = $this->getEntityManager();
-        // $testDimension = $em->getRepository('Application\Entity\Dimension')->findOneBy(array('id'=>1));
         $testDimension = $em->getRepository('Application\Entity\Dimension')->findAll();
         if($testDimension)
         {
-            // echo("Dimension population already performed:");
-            // var_dump($testDimension);
-            die("Dimension population already performed:");
+            echo("Dimension population already performed:");
         }
         else 
         {    
@@ -123,11 +120,117 @@ class SetupController extends BaseController
                 $this->getEntityManager()->persist($myDimension);
             }
             $this->getEntityManager()->flush();
-            var_dump($dimension_array);
+//             var_dump($dimension_array);
             echo("</br>dimension model populated");
-            // return $dimension_array;
-//             var_dump($testDimension);
-//             die("Dimension should be empty:");
         }
+    }
+    public function initialEntriesAction()
+    {
+        // this was all copied and pasted, and the laptop is running out
+        $user_array = array(
+            1=>array(
+                'enterprise_id'=>1,
+                'username'=>"admin",
+                'email'=>"admin@email.com",
+                'display_name'=>"Administrator",
+                'password'=>"password"
+            ),
+        );
+        $enterprise_array = array(
+            1=>array(
+                'name'=>"SADB Application Administration",
+            ),
+        );
+        $em = $this->getEntityManager();
+        $testEnterprise = $em->getRepository('Application\Entity\Enterprise')->findOneBy(array('name'=>'SADB Application Administration'));
+        $myEnterprise = new Enterprise();
+        if($testEnterprise)
+        {
+            // var_dump($testEnterprise);
+            $myEnterprise=$testEnterprise;
+            echo("Enterprise generation already performed</br>");
+        }
+        else
+        {
+            foreach ($enterprise_array as $enterprise)
+            {
+//                 $myEnterprise = new Enterprise();
+                $myEnterprise->setName($enterprise['name']);
+        
+                $this->getEntityManager()->persist($myEnterprise);
+            }
+            $this->getEntityManager()->flush();
+            // var_dump($myEnterprise);
+            echo("enterprise model populated</br>");
+        }
+        
+        $testUser = $em->getRepository('Application\Entity\User')->findOneBy(array('username'=>'admin'));
+        if($testUser)
+        {
+            // echo("Dimension population already performed:");
+            //var_dump($testUser);
+            echo("User generation already performed</br>");
+        }
+        else
+        {
+            foreach ($user_array as $user)
+            {
+                $myUser = new User();
+                $myUser->setEnterprise($myEnterprise);
+                $myUser->setUsername($user['username']);
+                $myUser->setEmail($user['email']);
+                $myUser->setDisplayname($user['display_name']);
+                $myUser->setPassword($user['password']);
+        
+                $this->getEntityManager()->persist($myUser);
+            }
+            $this->getEntityManager()->flush();
+            // var_dump($myUser);
+            echo("user model populated</br>");
+        }
+    }
+    
+    public function socialMediaAction()
+    {
+        $user_array = array(
+            1=>array(
+                'enterprise_id'=>1,
+                'username'=>"admin",
+                'email'=>"admin@email.com",
+                'display_name'=>"Administrator",
+                'password'=>"password"
+            ),
+        );
+        $enterprise_array = array(
+            1=>array(
+                'name'=>"SADB Application Administration",
+            ),
+        );
+        $em = $this->getEntityManager();
+        $testEnterprise = $em->getRepository('Application\Entity\Enterprise')->findOneBy(array('name'=>'SADB Application Administration'));
+        $myEnterprise = new Enterprise();
+        if($testEnterprise)
+        {
+            // var_dump($testEnterprise);
+            $myEnterprise=$testEnterprise;
+            echo("Enterprise generation already performed</br>");
+        }
+        else
+        {
+            foreach ($enterprise_array as $enterprise)
+            {
+                //                 $myEnterprise = new Enterprise();
+                $myEnterprise->setName($enterprise['name']);
+        
+                $this->getEntityManager()->persist($myEnterprise);
+            }
+            $this->getEntityManager()->flush();
+            // var_dump($myEnterprise);
+            echo("enterprise model populated</br>");
+        }
+    }
+    private function populateEntity()
+    {
+        //
     }
 }
