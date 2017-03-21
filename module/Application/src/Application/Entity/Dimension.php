@@ -29,6 +29,7 @@ class Dimension {
     
     public function __construct(){
         $this->created = new \DateTime();
+        $this->last_updated = new \DateTime();
     }
 
     /**
@@ -64,6 +65,7 @@ class Dimension {
     public function setName($name)
     {
         $this->name = $name;
+        $this->last_updated = new \DateTime();
 
         return $this;
     }
