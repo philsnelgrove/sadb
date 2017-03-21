@@ -27,21 +27,22 @@ class DimensionForm extends Form implements ObjectManagerAwareInterface
      * needs to be set in init(), because constructor won't be aware of objectmanager
      */
     public function init()
-    {        
+    {
+        // $this->setObjectManager($this->getServiceLocator()->get('Doctrine\ORM\EntityManager'));
         $this->add(array(
             'name' => 'id',
             'type' => 'Hidden',
         ));
 
         $name = new Element\Text('name');
-        $name->setOptions( array('label' => 'Kategoriebezeichnung'));
+        $name->setOptions( array('label' => 'Dimensions'));
         $this->add($name);
 
         $this->add(array(
                 'name' => 'parent',
                 'type' => 'DoctrineModule\Form\Element\ObjectSelect',
                 'options' => array(
-                        'label' => "übergeordnete Kategorie",
+                        'label' => "Select Dimension",
                         'empty_option'    => '',
                         'object_manager' => $this->getObjectManager(),
                         'target_class' => 'Application\Entity\Dimension',
@@ -61,9 +62,17 @@ class DimensionForm extends Form implements ObjectManagerAwareInterface
         $this->setInputFilter($this->createInputFilter());
     }
 
-    public function __construct($name = null, $options = array())
-    {         
+//     public function __construct($name = null, $options = array())
+//     {         
+//         parent::__construct($name, $options);
+//         $this->init();
+//     }
+
+    public function __construct(ObjectManager $objectManager, $name = null, $options = array())
+    {
         parent::__construct($name, $options);
+        $this->setObjectManager($objectManager);
+        $this->init();
     }
 
     public function createInputFilter()

@@ -14,7 +14,10 @@ class IndexController extends BaseController
 
     public function indexAction()
     {
-         $form = new DimensionForm();
+         $objectmanager = $this->getServiceLocator()->get('Doctrine\ORM\EntityManager');
+         // $form = new DimensionForm();
+         $form = new DimensionForm($objectmanager);
+         // $form->setObjectManager($this->getServiceLocator()->get('Doctrine\ORM\EntityManager'));
          $form->get('submit')->setValue('Add');
 
          $request = $this->getRequest();
@@ -179,5 +182,16 @@ class IndexController extends BaseController
     public function deleteAction()
     {
         // here be code for delete action
+    }
+    
+    public function fetchAction()
+    {
+        // use stored tokens
+        // if access token is expired, request a new one
+        // make the CURL to facebook using tokens
+        // grab result
+        // parse result
+        // create a record for the post, and associate the dimensional properties
+        // record the values for each dimensional property
     }
 }
