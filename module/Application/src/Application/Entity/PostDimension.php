@@ -72,6 +72,7 @@ class PostDimension {
     public function setValue($value)
     {
         $this->value = $value;
+        $this->last_updated = new \DateTime();
 
         return $this;
     }
@@ -115,6 +116,7 @@ class PostDimension {
     public function setPost(\Application\Entity\Post $post = null)
     {
         $this->post = $post;
+        $this->last_updated = new \DateTime();
 
         return $this;
     }
@@ -138,6 +140,7 @@ class PostDimension {
     public function setDimension(\Application\Entity\Dimension $dimension = null)
     {
         $this->dimension = $dimension;
+        $this->last_updated = new \DateTime();
 
         return $this;
     }

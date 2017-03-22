@@ -34,6 +34,7 @@ class Enterprise {
     
     public function __construct(){
         $this->created = new \DateTime();
+        $this->last_updated = new \DateTime();
         // $this->users = new ArrayCollection();
         // $this->socialMediaPresences[] = new ArrayCollection();
     }

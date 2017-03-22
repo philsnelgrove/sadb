@@ -56,4 +56,176 @@ class Page {
     private function setCreated()
     {
     }
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set social_media_service_id
+     *
+     * @param string $socialMediaServiceId
+     * @return Page
+     */
+    public function setSocialMediaServiceId($socialMediaServiceId)
+    {
+        $this->social_media_service_id = $socialMediaServiceId;
+        $this->last_updated = new \DateTime();
+
+        return $this;
+    }
+
+    /**
+     * Get social_media_service_id
+     *
+     * @return string 
+     */
+    public function getSocialMediaServiceId()
+    {
+        return $this->social_media_service_id;
+    }
+
+    /**
+     * Set title
+     *
+     * @param string $title
+     * @return Page
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+        $this->last_updated = new \DateTime();
+
+        return $this;
+    }
+
+    /**
+     * Get title
+     *
+     * @return string 
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * Get last_updated
+     *
+     * @return \DateTime 
+     */
+    public function getLastUpdated()
+    {
+        return $this->last_updated;
+    }
+
+    /**
+     * Get created
+     *
+     * @return \DateTime 
+     */
+    public function getCreated()
+    {
+        return $this->created;
+    }
+
+    /**
+     * Set social_media_presence
+     *
+     * @param \Application\Entity\SocialMediaPresence $socialMediaPresence
+     * @return Page
+     */
+    public function setSocialMediaPresence(\Application\Entity\SocialMediaPresence $socialMediaPresence = null)
+    {
+        $this->social_media_presence = $socialMediaPresence;
+        $this->last_updated = new \DateTime();
+
+        return $this;
+    }
+
+    /**
+     * Get social_media_presence
+     *
+     * @return \Application\Entity\SocialMediaPresence 
+     */
+    public function getSocialMediaPresence()
+    {
+        return $this->social_media_presence;
+    }
+
+    /**
+     * Add posts
+     *
+     * @param \Application\Entity\Post $posts
+     * @return Page
+     */
+    public function addPost(\Application\Entity\Post $posts)
+    {
+        $this->posts[] = $posts;
+        $this->last_updated = new \DateTime();
+
+        return $this;
+    }
+
+    /**
+     * Remove posts
+     *
+     * @param \Application\Entity\Post $posts
+     */
+    public function removePost(\Application\Entity\Post $posts)
+    {
+        $this->posts->removeElement($posts);
+        $this->last_updated = new \DateTime();
+    }
+
+    /**
+     * Get posts
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPosts()
+    {
+        return $this->posts;
+    }
+
+    /**
+     * Add insights
+     *
+     * @param \Application\Entity\PageDimension $insights
+     * @return Page
+     */
+    public function addInsight(\Application\Entity\PageDimension $insights)
+    {
+        $this->insights[] = $insights;
+        $this->last_updated = new \DateTime();
+
+        return $this;
+    }
+
+    /**
+     * Remove insights
+     *
+     * @param \Application\Entity\PageDimension $insights
+     */
+    public function removeInsight(\Application\Entity\PageDimension $insights)
+    {
+        $this->insights->removeElement($insights);
+        $this->last_updated = new \DateTime();
+    }
+
+    /**
+     * Get insights
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getInsights()
+    {
+        return $this->insights;
+    }
 }

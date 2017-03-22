@@ -95,11 +95,15 @@ class FetchController extends BaseController
     
     public function postAction()
     {
+        if (!session_id()) {
+            session_start();
+        }
         $request = $this->getRequest();
         $fb_query = '';
         $app_id = '';
         $app_secret = '';
-//        $access_token = '';
+        $current_identity = $this->zfcUserAuthentication()->getIdentity();
+        $access_token = $current_identity->getAccessToken()->getToken();
         $em = $this->getEntityManager();
         
         if ($request->isPost()) 
@@ -134,25 +138,18 @@ class FetchController extends BaseController
                 'app_id' => $app_id,
                 'app_secret' => $app_secret,
                 'default_graph_version' => 'v2.5',
-//                'default_access_token' => $app_id . '|' . $app_secret,
+                'default_access_token' => $access_token,
             ]);
             
             echo("Facebook query parameters are " . $fb_query . "</br>");
             echo("Facebook app_id is " . $app_id . "</br>");
             echo("Facebook app_secret is " . $app_secret . "</br>");
-            
-            // Use one of the helper classes to get a Facebook\Authentication\AccessToken entity.
-            //   $helper = $fb->getRedirectLoginHelper();
-            //   $helper = $fb->getJavaScriptHelper();
-            //   $helper = $fb->getCanvasHelper();
-            //   $helper = $fb->getPageTabHelper();
-            
-            // var_dump($helper);
+            echo("Facebook access_token is " . $access_token . "</br>");
             
             try {
                 // Get the \Facebook\GraphNodes\GraphUser object for the current user.
                 // If you provided a 'default_access_token', the '{access-token}' is optional.
-                $response = $fb->get('/me'.$fb_query);
+                $response = $fb->get('/me');
             } catch(\Facebook\Exceptions\FacebookResponseException $e) {
                 // When Graph returns an error
                 echo 'Graph returned an error: ' . $e->getMessage();
@@ -176,7 +173,7 @@ class FetchController extends BaseController
         $request = $this->getRequest();
         $em = $this->getEntityManager();
         // grab the facebooky goodness
-        $myPresence = $em->getRepository('Application\Entity\SocialMediaPresence')->findOneBy(array('id'=>'4'));
+        $myPresence = $em->getRepository('Application\Entity\SocialMediaPresence')->findOneBy(array('id'=>'1'));
         $app_id = $myPresence->getSocialMediaGateway()->getAppId();
         $app_secret = $myPresence->getSocialMediaGateway()->getAppSecret();
         $fb = new Facebook([

@@ -295,7 +295,7 @@ class SetupController extends BaseController
             session_start();
         }
         $em = $this->getEntityManager();
-        $myPresence = $em->getRepository('Application\Entity\SocialMediaPresence')->findOneBy(array('id'=>'4'));
+        $myPresence = $em->getRepository('Application\Entity\SocialMediaPresence')->findOneBy(array('id'=>'1'));
         $app_id = $myPresence->getSocialMediaGateway()->getAppId();
         $app_secret = $myPresence->getSocialMediaGateway()->getAppSecret();
         $fb = new \Facebook\Facebook([

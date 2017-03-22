@@ -201,4 +201,37 @@ class SocialMediaPresence {
     {
         return $this->socialMediaGateway;
     }
+
+    /**
+     * Add pages
+     *
+     * @param \Application\Entity\Page $pages
+     * @return SocialMediaPresence
+     */
+    public function addPage(\Application\Entity\Page $pages)
+    {
+        $this->pages[] = $pages;
+
+        return $this;
+    }
+
+    /**
+     * Remove pages
+     *
+     * @param \Application\Entity\Page $pages
+     */
+    public function removePage(\Application\Entity\Page $pages)
+    {
+        $this->pages->removeElement($pages);
+    }
+
+    /**
+     * Get pages
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPages()
+    {
+        return $this->pages;
+    }
 }
