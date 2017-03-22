@@ -26,6 +26,12 @@ class SocialMediaGateway {
     /** @ORM\OneToOne(targetEntity="SocialMediaPresence") */
     protected $social_media_presence;
     
+    /** @ORM\Column(type="string") */
+    protected $app_id;
+    
+    /** @ORM\Column(type="string") */
+    protected $app_secret;
+    
     /** @ORM\Column(type="datetime") */
     protected $last_updated;
     
@@ -131,6 +137,7 @@ class SocialMediaGateway {
     public function setAccessToken(\Application\Entity\AccessToken $accessToken = null)
     {
         $this->access_token = $accessToken;
+        $this->last_updated = new \DateTime();
 
         return $this;
     }
@@ -191,5 +198,53 @@ class SocialMediaGateway {
      */
     private function setCreated()
     {
+    }
+
+    /**
+     * Set app_id
+     *
+     * @param string $appId
+     * @return SocialMediaGateway
+     */
+    public function setAppId($appId)
+    {
+        $this->app_id = $appId;
+        $this->last_updated = new \DateTime();
+
+        return $this;
+    }
+
+    /**
+     * Get app_id
+     *
+     * @return string 
+     */
+    public function getAppId()
+    {
+        return $this->app_id;
+    }
+
+    /**
+     * Set app_secret
+     *
+     * @param string $appSecret
+     * @return SocialMediaGateway
+     */
+    public function setAppSecret($appSecret)
+    {
+        $this->app_secret = $appSecret;
+        $this->last_updated = new \DateTime();
+
+        return $this;
+    }
+
+    /**
+     * Get app_secret
+     *
+     * @return string 
+     */
+    public function getAppSecret()
+    {
+        return $this->app_secret;
     }
 }

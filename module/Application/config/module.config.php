@@ -76,6 +76,7 @@ return array(
             'Application\Controller\Index' => 'Application\Controller\IndexController',
             'Application\Controller\Fetch' => 'Application\Controller\FetchController',
             'Application\Controller\Setup' => 'Application\Controller\SetupController',
+            'Application\Controller\Report' => 'Application\Controller\ReportController',
         ),
     ),
     'view_manager' => array(

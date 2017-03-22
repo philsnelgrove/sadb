@@ -6,6 +6,9 @@ use Zend\View\Model\ViewModel;
 use Application\Entity\Dimension;
 use Application\Entity\User;
 use Application\Entity\Enterprise;
+use Application\Entity\AccessToken;
+use Application\Entity\SocialMediaGateway;
+use Application\Entity\SocialMediaPresence;
 
 /**
  * SetupController
@@ -126,7 +129,6 @@ class SetupController extends BaseController
     }
     public function initialEntriesAction()
     {
-        // this was all copied and pasted, and the laptop is running out
         $user_array = array(
             1=>array(
                 'enterprise_id'=>1,
@@ -192,42 +194,96 @@ class SetupController extends BaseController
     
     public function socialMediaAction()
     {
-        $user_array = array(
-            1=>array(
-                'enterprise_id'=>1,
-                'username'=>"admin",
-                'email'=>"admin@email.com",
-                'display_name'=>"Administrator",
-                'password'=>"password"
-            ),
-        );
-        $enterprise_array = array(
-            1=>array(
-                'name'=>"SADB Application Administration",
-            ),
-        );
+        $config = $this->getServiceLocator()->get('Config');
         $em = $this->getEntityManager();
-        $testEnterprise = $em->getRepository('Application\Entity\Enterprise')->findOneBy(array('name'=>'SADB Application Administration'));
-        $myEnterprise = new Enterprise();
-        if($testEnterprise)
+        
+        $token_array = array(
+            1=>array(
+                'token'=>'1234',
+            ),
+        );
+        $gateway_array = array(
+            1=>array(
+                'name'=>"Facebook",
+                'app_id'=>$config['facebook_constants']['test_page']['app_id'],
+                'app_secret'=>$config['facebook_constants']['test_page']['app_secret'],
+            ),
+        );
+        $presence_array = array(
+            1=>array(
+                'name'=>"Test Facebook Page",
+            ),
+        );
+        
+        $testToken = $em->getRepository('Application\Entity\AccessToken')->findOneBy(array('token'=>'1234'));
+        $myToken = new AccessToken();
+        if($testToken)
         {
-            // var_dump($testEnterprise);
-            $myEnterprise=$testEnterprise;
-            echo("Enterprise generation already performed</br>");
+            $myToken=$testToken;
+            echo("Token generation already performed</br>");
         }
         else
         {
-            foreach ($enterprise_array as $enterprise)
+            foreach ($token_array as $token)
             {
                 //                 $myEnterprise = new Enterprise();
-                $myEnterprise->setName($enterprise['name']);
-        
-                $this->getEntityManager()->persist($myEnterprise);
+                $myToken->setToken($token['token']);
+                $em->persist($myToken);
             }
-            $this->getEntityManager()->flush();
-            // var_dump($myEnterprise);
-            echo("enterprise model populated</br>");
+//            $this->getEntityManager()->flush();
+            echo("token model populated</br>");
         }
+        
+        $testGateway = $em->getRepository('Application\Entity\SocialMediaGateway')->findOneBy(array('name'=>'Facebook'));
+        $myGateway = new SocialMediaGateway();
+        if($testGateway)
+        {
+            $myGateway=$testGateway;
+            echo("Social Media Gateway generation already performed</br>");
+        }
+        else
+        {
+            foreach ($gateway_array as $gateway)
+            {
+                $myGateway->setAccessToken($myToken);
+                $myGateway->setAppId($gateway['app_id']);
+                $myGateway->setAppSecret($gateway['app_secret']);
+                $myGateway->setName($gateway['name']);
+                
+                $myToken->setSocialMediaGateway($myGateway);
+                $em->persist($myGateway);
+                $em->persist($myToken);
+            }
+            // $em->flush();
+            echo("Social Media Gateway model populated</br>");
+        }
+        
+        $testPresence = $em->getRepository('Application\Entity\SocialMediaPresence')->findOneBy(array('name'=>'Test Facebook Page'));
+        $myPresence = new SocialMediaPresence();
+        if($testPresence)
+        {
+            $myPresence=$testPresence;
+            echo("Social Media Presence generation already performed</br>");
+            var_dump($myPresence);
+        }
+        else
+        {
+            $testEnterprise = $em->getRepository('Application\Entity\Enterprise')->findOneBy(array('name'=>'SADB Application Administration'));
+            foreach ($presence_array as $presence)
+            {
+                $myPresence->setName($presence['name']);
+                $myPresence->setSocialMediaGateway($myGateway);
+                $myPresence->setParentEnterprise($testEnterprise);
+        
+                $myGateway->setSocialMediaPresence($myPresence);
+                $testEnterprise->addSocialMediaPresence($myPresence);
+                $em->persist($myPresence);
+                $em->persist($testEnterprise);
+            }
+            // $em->flush();
+            echo("Social Media Presence model populated</br>");
+        }
+        $em->flush();
     }
     private function populateEntity()
     {

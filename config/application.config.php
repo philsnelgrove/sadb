@@ -12,7 +12,8 @@ return array(
         'Application',
         'API',
         'ZfcUserDoctrineORM',
-        'BjyProfiler','Admin',
+        'BjyProfiler',
+        'Admin',
     ),
 
     // These are various options for the listeners attached to the ModuleManager

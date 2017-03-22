@@ -109,7 +109,6 @@ class SocialMediaPresence {
     public function addPost(\Application\Entity\Post $post)
     {
         $this->posts[] = $post;
-        $this->last_updated = new \DateTime();
 
         return $this;
     }
@@ -122,7 +121,6 @@ class SocialMediaPresence {
     public function removePost(\Application\Entity\Post $post)
     {
         $this->posts->removeElement($post);
-        $this->last_updated = new \DateTime();
     }
 
     /**
@@ -145,7 +143,6 @@ class SocialMediaPresence {
     public function setParentEnterprise(\Application\Entity\Enterprise $parentEnterprise = null)
     {
         $this->parentEnterprise = $parentEnterprise;
-        $this->last_updated = new \DateTime();
 
         return $this;
     }
@@ -173,29 +170,5 @@ class SocialMediaPresence {
      */
     private function setCreated()
     {
-    }
-
-    /**
-     * Set socialMediaGateway
-     *
-     * @param \Application\Entity\SocialMediaGateway $socialMediaGateway
-     * @return SocialMediaPresence
-     */
-    public function setSocialMediaGateway(\Application\Entity\SocialMediaGateway $socialMediaGateway = null)
-    {
-        $this->socialMediaGateway = $socialMediaGateway;
-        $this->last_updated = new \DateTime();
-
-        return $this;
-    }
-
-    /**
-     * Get socialMediaGateway
-     *
-     * @return \Application\Entity\SocialMediaGateway 
-     */
-    public function getSocialMediaGateway()
-    {
-        return $this->socialMediaGateway;
     }
 }
