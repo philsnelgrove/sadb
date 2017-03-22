@@ -289,4 +289,25 @@ class SetupController extends BaseController
     {
         //
     }
+    public function getFacebookTokenAction()
+    {
+        if (!session_id()) {
+            session_start();
+        }
+        $em = $this->getEntityManager();
+        $myPresence = $em->getRepository('Application\Entity\SocialMediaPresence')->findOneBy(array('id'=>'4'));
+        $app_id = $myPresence->getSocialMediaGateway()->getAppId();
+        $app_secret = $myPresence->getSocialMediaGateway()->getAppSecret();
+        $fb = new \Facebook\Facebook([
+            'app_id' => $app_id,
+            'app_secret' => $app_secret,
+            'default_graph_version' => 'v2.5',
+            //                'default_access_token' => $app_id . '|' . $app_secret,
+        ]);
+        $helper = $fb->getRedirectLoginHelper();
+        // $permissions = [];
+        // $loginUrl = $helper->getLoginUrl('http://{your-website}/login-callback.php', $permissions);
+        $loginUrl = $helper->getLoginUrl('http://localhost/application/fetch/receive_token_callback');
+        return array('login_url' => $loginUrl);
+    }
 }

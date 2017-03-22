@@ -18,6 +18,9 @@ class User extends ZfcUser {
     /** @ORM\Column(type="datetime") */
     protected $last_updated;
     
+    /** @ORM\OneToOne(targetEntity="AccessToken") */
+    protected $accessToken;
+    
     /** @ORM\Column(type="datetime", options={"default": 0})*/
     protected $created;
     
@@ -85,5 +88,28 @@ class User extends ZfcUser {
     public function getEnterprise()
     {
         return $this->enterprise;
+    }
+
+    /**
+     * Set accessToken
+     *
+     * @param \Application\Entity\AccessToken $accessToken
+     * @return User
+     */
+    public function setAccessToken(\Application\Entity\AccessToken $accessToken = null)
+    {
+        $this->accessToken = $accessToken;
+
+        return $this;
+    }
+
+    /**
+     * Get accessToken
+     *
+     * @return \Application\Entity\AccessToken 
+     */
+    public function getAccessToken()
+    {
+        return $this->accessToken;
     }
 }
