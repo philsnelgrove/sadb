@@ -22,6 +22,9 @@ class SocialMediaPresence {
     
     /** @ORM\OneToMany(targetEntity="Post", mappedBy="social_media_presence") */
     protected $posts;
+    
+    /** @ORM\OneToMany(targetEntity="Page", mappedBy="social_media_presence") */
+    protected $pages;
             
     /** 
      * @ORM\ManyToOne(targetEntity="Enterprise", inversedBy="socialMediaPresences", cascade={"persist"})

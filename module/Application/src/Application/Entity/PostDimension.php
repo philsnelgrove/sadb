@@ -20,8 +20,7 @@ class PostDimension {
     protected $post;
     
     /**
-     * @ORM\ManyToOne(targetEntity="Dimension", inversedBy="d")
-     * @ORM\JoinColumn(name="social_media_presence_id", referencedColumnName="id")
+     * @ORM\OneToOne(targetEntity="Dimension")
      */
     protected $dimension;
         

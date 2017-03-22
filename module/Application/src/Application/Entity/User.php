@@ -76,6 +76,7 @@ class User extends ZfcUser {
     public function setEnterprise(\Application\Entity\Enterprise $enterprise = null)
     {
         $this->enterprise = $enterprise;
+        $this->last_updated = new \DateTime();
 
         return $this;
     }
@@ -99,6 +100,7 @@ class User extends ZfcUser {
     public function setAccessToken(\Application\Entity\AccessToken $accessToken = null)
     {
         $this->accessToken = $accessToken;
+        $this->last_updated = new \DateTime();
 
         return $this;
     }

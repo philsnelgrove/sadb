@@ -8,6 +8,7 @@ use Zend\Form\Element;
 use Zend\Form\Form;
 use Facebook\Facebook;
 use Zend\View\View;
+use Application\Entity\AccessToken;
 
 /**
  * FetchController
@@ -207,9 +208,13 @@ class FetchController extends BaseController
             
             // insert the results into Db records
             $myUser = $em->getRepository('Application\Entity\User')->findOneBy(array('email'=>$user_email));
-            
-            // inject the token for displaying - dev
-            return array('token' => $accessToken);
+            $myToken = new AccessToken();
+            $myToken->setToken($accessToken);
+            $em->persist($myToken);
+            $myUser->setAccessToken($myToken);
+            $em->persist($myUser);
+            $em->flush();
+            return;
         }
         else 
         {
