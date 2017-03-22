@@ -3,6 +3,7 @@ namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use DoctrineModule\Form\Element\ObjectMultiCheckbox;
 use Zend\Form\Element;
 use Zend\Form\Form;
 
@@ -22,11 +23,7 @@ class FetchController extends BaseController
      */
     public function indexAction()
     {
-        //$view = new ViewModel();
-        
         $em = $this->getEntityManager();
-        $dimension_array = $em->getRepository('Application\Entity\Dimension')->findAll();
-        
         $formManager = $this->serviceLocator->get('FormElementManager');
         $form = $formManager->get('fetchForm');
         
@@ -61,26 +58,23 @@ class FetchController extends BaseController
                 'find_method'    => array(
                     'name'   => 'findBy',
                     'params' => array(
-                        'criteria' => array(),
+                        'criteria' => array(), // <-- will be "enterprises this user is auth'd for"
                         'orderBy'  => array('name' => 'ASC'),
                     ),
                 ),
             ),
         ));
         
-        foreach($dimension_array as $dimension)
-        {
-            $form->add(array(
-                'type' => 'Zend\Form\Element\Checkbox',
-                'name' => $dimension->getName(),
-                'options' => array(
-                    'label' => $dimension->getName(),
-                    'use_hidden_element' => true,
-                    'checked_value' => $dimension->getName(),
-                    'unchecked_value' => ''
-                )
-            ));
-        }
+        $form->add(array(
+            'type' => 'DoctrineModule\Form\Element\ObjectMultiCheckbox',
+            'name' => 'dimensionTable',
+            'options' => array(
+                'label' => 'Select dimensions to query',
+                'object_manager' => $em,
+                'target_class'   => 'Application\Entity\Dimension',
+                'property'       => 'name',
+            )
+        ));
         
         $form->add(array(
             'name' => 'submit',
@@ -91,14 +85,19 @@ class FetchController extends BaseController
             ),
         ));
         
+        // $form->setAttribute('action', $this->url('fetch', array('action' => 'post')))->prepare();
+        
+        return array('form' => $form);
+    }
+    
+    public function postAction()
+    {
         $request = $this->getRequest();
         if ($request->isPost()) {
             $form->setData($request->getPost());
             if ($form->isValid()) {
                 echo($comment);
             }
-        }
-        
-        return array('form' => $form);
+        };
     }
 }
