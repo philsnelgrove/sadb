@@ -67,7 +67,15 @@ class Module
                         $element->setObjectManager($entityManager);
                     }
                 }
-            )
+            ),
+            'factories' => array(
+                'fetchForm' => function($sm) {
+                    $form = new Form\FetchForm();
+                    $form->setInputFilter(new \Application\Form\FetchFilter);
+                    $form->setHydrator(new \Zend\Stdlib\Hydrator\ObjectProperty());
+                    return $form;
+                },
+            ),
         );
     }
 }
