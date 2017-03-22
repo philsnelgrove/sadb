@@ -5,6 +5,11 @@ $this->headTitle($title);
 <h1><?php echo $this->escapeHtml($title); ?></h1>
 <?php
 $form = $this->form;
+$form->prepare();
 // $form->setAttribute('action', $this->url('fetch', array('action' => 'post')))->prepare();
-$form->setAttribute('action', $this->url());
-echo $this->form()->render($form);
+// $form->setAttribute('action', $this->url());
+// echo $this->form()->render($form);
+$form->setAttribute('method', 'post');
+// echo($this->url('application/default', array('controller'=>'fetch','action'=>'post')));
+$form->setAttribute('action', $this->url('application/default', array('controller'=>'fetch','action'=>'post')));
+echo $this->form($form);

@@ -93,10 +93,26 @@ class FetchController extends BaseController
     public function postAction()
     {
         $request = $this->getRequest();
+        $fb_query = '';
         if ($request->isPost()) {
-            $form->setData($request->getPost());
-            if ($form->isValid()) {
-                echo($comment);
+//             $form->setData($request->getPost());
+//             if ($form->isValid()) {
+//                 echo($comment);
+//             }
+            $content=$request->getPost();
+            foreach($content as $key => $value)
+            {
+                if (gettype($value) == "array" || gettype($value) == "object")
+                {
+                    foreach($value as $k => $v)
+                    {
+                        echo("Inner Key:" . $k . " value:" . $v . "</br>");
+                    }
+                }
+                else 
+                {
+                    echo("Key:" . $key . " value:" . $value . "</br>");
+                }
             }
         };
     }
