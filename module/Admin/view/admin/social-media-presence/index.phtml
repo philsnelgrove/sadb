@@ -1,14 +1,61 @@
 <strong>Module:</strong>        Admin &raquo;
-<strong>Controller:</strong>    Index &raquo;
-<strong>Action:</strong>        index
+<strong>Controller:</strong>    SocialMediaPresence &raquo;
+<strong>Action:</strong>        Index
 </br>
-<h3>Administrative options:</h3>
-<body>
-<?php // set of url_helpers that resolve to administrative views ?>
-<?php echo('List of administrative options goes here');?></br>
-<a href='/admin/index/edit_model'>- edit model data</a></br>
-<a href='/admin/index/social_media'>- social media auth data</a></br>
-<a href='/admin/index/user_permission'>- administarate user permissions</a></br>
-<a href='/admin/index/user_edit'>- edit user data</a></br>
-<a href='/admin/index/generate_report'>- generate report</a></br>
-</body>
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Social Media Presences</h3>
+            </div>
+            <div class="panel-body">
+                <a href="<?php echo $this->url('admin/default', array('controller' => 'socialmediapresence', 'action'=>'add'));?>">Add Social Media Presence</a>
+
+                <?php if (isset($presences)) : ?>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Enterprise</th>
+                        <th>Pages</th>
+                        <th>Social Media Gateway</th>
+                        <th>Date Created</th>
+                        <th>Date last Updated</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                <?php foreach($presences as $presence): ?>
+                    <tbody>
+                    <tr>
+                        <td><?php echo $presence->getId(); ?></td>
+                        <td><?php echo $presence->getName(); ?></td>
+                        <td><?php echo $presence->getParentEnterprise()->getName(); ?></td>
+                        <td><list><?php
+                        if($presence->getPages())
+                        {
+                            foreach ($presence->getPages()->toArray() as $page)
+                            {
+                                echo($page->getTitle() . '</br>');
+                            } 
+                        }
+                        else 
+                        {
+                            echo'</br';
+                        }
+                        ?></list></td>
+                        <td><?php echo $presence->getSocialMediaGateway()->getName(); ?></td>
+                        <td><?php echo $presence->getCreated()->getTimestamp(); ?></td>
+                        <td><?php echo $presence->getLastUpdated()->getTimestamp(); ?></td><td>
+                            <a href="<?php echo ($this->url('admin/default', array('controller' => 'socialmediapresence', 'action'=>'edit')) . '/' . $presence->getId() );?>">Edit</a> |
+                            <a href="<?php echo ($this->url('admin/default', array('controller' => 'socialmediapresence', 'action'=>'delete')) . '/' . $presence->getId() );?>">Delete</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                <?php endforeach; ?>
+                </table>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+</div>

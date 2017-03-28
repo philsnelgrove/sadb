@@ -19,10 +19,7 @@ class SocialMediaPresence {
     
     /** @ORM\OneToOne(targetEntity="SocialMediaGateway", cascade={"all"}) */
     protected $socialMediaGateway;
-    
-    /** @ORM\OneToMany(targetEntity="Post", mappedBy="social_media_presence") */
-    protected $posts;
-    
+
     /** @ORM\OneToMany(targetEntity="Page", mappedBy="social_media_presence") */
     protected $pages;
             

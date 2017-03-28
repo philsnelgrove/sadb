@@ -13,7 +13,6 @@ use DoctrineModule\Stdlib\Hydrator\DoctrineObject;
 
 class UserController extends BaseController
 {
-    protected $_objectManager;
     public function indexAction()
     {
         $users = $this->getObjectManager()->getRepository('\Application\Entity\User')->findAll();
@@ -33,8 +32,10 @@ class UserController extends BaseController
             $user->setUsername($this->getRequest()->getPost('username'));
             $enterprise = $this->getObjectManager()->getRepository('\Application\Entity\Enterprise')->findOneBy(array('id'=>$this->getRequest()->getPost('enterprise')));
             $user->setEnterprise($enterprise);
+            $enterprise->addUser($user);
 
             $this->getObjectManager()->persist($user);
+            $this->getObjectManager()->persist($enterprise);
             $this->getObjectManager()->flush();
             $newId = $user->getId();
 
@@ -97,9 +98,11 @@ class UserController extends BaseController
             {
                 $enterprise = $this->getObjectManager()->getRepository('\Application\Entity\Enterprise')->findOneBy(array('id'=>$this->getRequest()->getPost('enterprise')));
                 $user->setEnterprise($enterprise);
+                $enterprise->addUser($user);
             }
 
             $this->getObjectManager()->persist($user);
+            $this->getObjectManager()->persist($enterprise);
             $this->getObjectManager()->flush();
 
             return $this->redirect()->toRoute('userlist');
@@ -159,14 +162,5 @@ class UserController extends BaseController
         }
 
         return new ViewModel(array('user' => $user));
-    }
-
-    protected function getObjectManager()
-    {
-        if (!$this->_objectManager) {
-            $this->_objectManager = $this->getServiceLocator()->get('Doctrine\ORM\EntityManager');
-        }
-    
-        return $this->_objectManager;
     }
 }

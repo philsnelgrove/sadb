@@ -47,9 +47,10 @@ class Module implements AutoloaderProviderInterface
     public function getFormElementConfig()
     {
         return array(
-            'invokables' => array(
-                'UserAddForm' => 'Admin\Form\UserAddForm'
-            ),
+//             'invokables' => array(
+//                 'UserAddForm' => 'Admin\Form\UserAddForm',
+//                 'UserAddForm' => 'Admin\Form\UserAddForm',
+//             ),
             'initializers' => array(
                 'ObjectManagerInitializer' => function ($element, $formElements) {
                     // look if the form implements the ObjectManagerAwareInterface
@@ -70,10 +71,46 @@ class Module implements AutoloaderProviderInterface
                     return $form;
                 },
                 'userEditForm' => function ($sm) {
-                $form = new Form\UserEditForm();
-                // $form->setInputFilter(new \Admin\Form\FetchFilter);
-                $form->setHydrator(new \Zend\Stdlib\Hydrator\ObjectProperty());
-                return $form;
+                    $form = new Form\UserEditForm();
+                    // $form->setInputFilter(new \Admin\Form\FetchFilter);
+                    $form->setHydrator(new \Zend\Stdlib\Hydrator\ObjectProperty());
+                    return $form;
+                },
+                'enterpriseAddForm' => function ($sm) {
+                    $form = new Form\EnterpriseAddForm();
+                    // $form->setInputFilter(new \Admin\Form\FetchFilter);
+                    $form->setHydrator(new \Zend\Stdlib\Hydrator\ObjectProperty());
+                    return $form;
+                },
+                'enterpriseEditForm' => function ($sm) {
+                    $form = new Form\EnterpriseEditForm();
+                    // $form->setInputFilter(new \Admin\Form\FetchFilter);
+                    $form->setHydrator(new \Zend\Stdlib\Hydrator\ObjectProperty());
+                    return $form;
+                },
+                'socialMediaPresenceAddForm' => function ($sm) {
+                    $form = new Form\SocialMediaPresenceAddForm();
+                    // $form->setInputFilter(new \Admin\Form\FetchFilter);
+                    $form->setHydrator(new \Zend\Stdlib\Hydrator\ObjectProperty());
+                    return $form;
+                },
+                'socialMediaPresenceEditForm' => function ($sm) {
+                    $form = new Form\SocialMediaPresenceEditForm();
+                    // $form->setInputFilter(new \Admin\Form\FetchFilter);
+                    $form->setHydrator(new \Zend\Stdlib\Hydrator\ObjectProperty());
+                    return $form;
+                },
+                'socialMediaGatewayAddForm' => function ($sm) {
+                    $form = new Form\SocialMediaGatewayAddForm();
+                    // $form->setInputFilter(new \Admin\Form\FetchFilter);
+                    $form->setHydrator(new \Zend\Stdlib\Hydrator\ObjectProperty());
+                    return $form;
+                },
+                'socialMediaGatewayEditForm' => function ($sm) {
+                    $form = new Form\SocialMediaGatewayEditForm();
+                    // $form->setInputFilter(new \Admin\Form\FetchFilter);
+                    $form->setHydrator(new \Zend\Stdlib\Hydrator\ObjectProperty());
+                    return $form;
                 },
             ),
         );

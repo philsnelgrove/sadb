@@ -1,0 +1,31 @@
+<strong>Module:</strong>        Admin &raquo;
+<strong>Controller:</strong>    Dimension &raquo;
+<strong>Action:</strong>        Edit
+</br>
+<?php
+
+$title = 'Edit Dimension';
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+<?php 
+$form = $this->form;
+?>
+<fieldset>
+    <?php
+    $formContent = '';
+    echo $this->form()->openTag($form);
+    foreach ($form as $element)
+        $formContent .= $this->formrow($element) . "<br/>"; //note the "BR"
+
+    echo $formContent;
+    echo $this->form()->closeTag();
+
+    ?>
+</fieldset>
+<?php 
+$form->prepare();
+$form->setAttribute('method', 'post');
+$form->setAttribute('action', $this->url('admin/default', array('controller' => 'dimension', 'action'=>'edit')) . '/' . $this->id );
+?>
+<a href='/admin/dimension/index'>Back</a>

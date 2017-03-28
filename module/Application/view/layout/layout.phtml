@@ -40,10 +40,14 @@
                     <ul class="nav navbar-nav">
                         <li class="active"><a href="<?php echo $this->url('home') ?>"><?php echo $this->translate('Home') ?></a></li>
                     </ul>
+                    <?php
+                       // echo $this->navigation('navigation')->menu();
+                    ?>
                 </div><!--/.nav-collapse -->
             </div>
         </nav>
         <div class="container">
+        	<?php echo $this->navigation('navigation')->breadcrumbs()->setMinDepth(0); ?>
             <?php echo $this->content; ?>
             <hr>
             <footer>

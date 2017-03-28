@@ -42,6 +42,7 @@ class SocialMediaGateway {
     
     public function __construct(){
         $this->created = new \DateTime();
+        $this->last_updated = new \DateTime();
         $this->guest_access_tokens = new ArrayCollection();
     }
     

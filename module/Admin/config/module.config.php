@@ -30,6 +30,36 @@ return array(
                     ),
                 ),
             ),
+            'enterpriselist' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/admin/enterprise/index',
+                    'defaults' => array(
+                        'controller' => 'Admin\Controller\Enterprise',
+                        'action'     => 'index',
+                    ),
+                ),
+            ),
+            'presencelist' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/admin/socialmediapresence/index',
+                    'defaults' => array(
+                        'controller' => 'Admin\Controller\SocialMediaPresence',
+                        'action'     => 'index',
+                    ),
+                ),
+            ),
+            'gatewaylist' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/admin/socialmediagateway/index',
+                    'defaults' => array(
+                        'controller' => 'Admin\Controller\SocialMediaGateway',
+                        'action'     => 'index',
+                    ),
+                ),
+            ),
             'admin' => array(
                 'type'    => 'Literal',
                 'options' => array(
@@ -69,6 +99,40 @@ return array(
     'view_manager' => array(
         'template_path_stack' => array(
             'Admin' => __DIR__ . '/../view',
+        ),
+    ),
+    'service_manager' => array(
+        'factories' => array(
+            'navigation' => 'Zend\Navigation\Service\DefaultNavigationFactory', // <-- add this
+        ),
+    ),
+    'navigation' => array(
+        'default' => array(
+            array(
+                'label' => 'Home',
+                'route' => 'home',
+            ),
+            array(
+                'label' => 'Album',
+                'route' => 'album',
+                'pages' => array(
+                    array(
+                        'label' => 'Add',
+                        'route' => 'album',
+                        'action' => 'add',
+                    ),
+                    array(
+                        'label' => 'Edit',
+                        'route' => 'album',
+                        'action' => 'edit',
+                    ),
+                    array(
+                        'label' => 'Delete',
+                        'route' => 'album',
+                        'action' => 'delete',
+                    ),
+                ),
+            ),
         ),
     ),
 );

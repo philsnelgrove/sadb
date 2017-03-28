@@ -1,0 +1,15 @@
+<strong>Module:</strong>        Admin &raquo;
+<strong>Controller:</strong>    SocialMediaPresence &raquo;
+<strong>Action:</strong>        Delete
+</br>
+<?php
+
+$title = 'Delete Social Media Presence';
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+Are you sure you want to delete the Social Media Presence <?php echo $presence->getName(); ?>? <br/>
+<form method="post">
+  <input type="submit" value="Delete">
+</form>
+<a href='/admin/socialmediapresence/index'>Back</a>

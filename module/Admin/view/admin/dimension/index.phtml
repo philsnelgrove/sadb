@@ -1,14 +1,43 @@
 <strong>Module:</strong>        Admin &raquo;
-<strong>Controller:</strong>    Index &raquo;
-<strong>Action:</strong>        index
+<strong>Controller:</strong>    Dimension &raquo;
+<strong>Action:</strong>        Index
 </br>
-<h3>Administrative options:</h3>
-<body>
-<?php // set of url_helpers that resolve to administrative views ?>
-<?php echo('List of administrative options goes here');?></br>
-<a href='/admin/index/edit_model'>- edit model data</a></br>
-<a href='/admin/index/social_media'>- social media auth data</a></br>
-<a href='/admin/index/user_permission'>- administarate user permissions</a></br>
-<a href='/admin/index/user_edit'>- edit user data</a></br>
-<a href='/admin/index/generate_report'>- generate report</a></br>
-</body>
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Users</h3>
+            </div>
+            <div class="panel-body">
+                <a href="<?php echo $this->url('admin/default', array('controller' => 'dimension', 'action'=>'add'));?>">Add Dimension</a>
+
+                <?php if (isset($dimensions)) : ?>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Date Created</th>
+                        <th>Date last Updated</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                <?php foreach($dimensions as $dimension): ?>
+                    <tbody>
+                    <tr>
+                        <td><?php echo $dimension->getId(); ?></td>
+                        <td><?php echo $dimension->getName(); ?></td>
+                        <td><?php echo $dimension->getCreated()->getTimestamp(); ?></td>
+                        <td><?php echo $dimension->getLastUpdated()->getTimestamp(); ?></td><td>
+                            <a href="<?php echo ($this->url('admin/default', array('controller' => 'dimension', 'action'=>'edit')) . '/' . $dimension->getId() );?>">Edit</a> |
+                            <a href="<?php echo ($this->url('admin/default', array('controller' => 'dimension', 'action'=>'delete')) . '/' . $dimension->getId() );?>">Delete</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                <?php endforeach; ?>
+                </table>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+</div>

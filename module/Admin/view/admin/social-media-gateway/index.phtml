@@ -1,14 +1,49 @@
 <strong>Module:</strong>        Admin &raquo;
-<strong>Controller:</strong>    Index &raquo;
-<strong>Action:</strong>        index
+<strong>Controller:</strong>    SocialMediaGateway &raquo;
+<strong>Action:</strong>        Index
+<?php echo $this->navigation()->breadcrumbs(); ?>
 </br>
-<h3>Administrative options:</h3>
-<body>
-<?php // set of url_helpers that resolve to administrative views ?>
-<?php echo('List of administrative options goes here');?></br>
-<a href='/admin/index/edit_model'>- edit model data</a></br>
-<a href='/admin/index/social_media'>- social media auth data</a></br>
-<a href='/admin/index/user_permission'>- administarate user permissions</a></br>
-<a href='/admin/index/user_edit'>- edit user data</a></br>
-<a href='/admin/index/generate_report'>- generate report</a></br>
-</body>
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Social Media Gateways</h3>
+            </div>
+            <div class="panel-body">
+                <a href="<?php echo $this->url('admin/default', array('controller' => 'socialmediagateway', 'action'=>'add'));?>">Add Social Media Gateway</a>
+                <?php if (isset($gateways)) : ?>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>App ID</th>
+                        <th>App Secret</th>
+                        <th>Social Media Presence</th>
+                        <th>Date Created</th>
+                        <th>Date last Updated</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                <?php foreach($gateways as $gateway): ?>
+                    <tbody>
+                    <tr>
+                        <td><?php echo $gateway->getId(); ?></td>
+                        <td><?php echo $gateway->getName(); ?></td>
+                        <td><?php echo $gateway->getAppId(); ?></td>
+                        <td><?php echo $gateway->getAppSecret(); ?></td>
+                        <td><?php if ($gateway->getSocialMediaPresence()) echo $gateway->getSocialMediaPresence()->getName(); else echo "---";?></td>
+                        <td><?php echo $gateway->getCreated()->getTimestamp(); ?></td>
+                        <td><?php echo $gateway->getLastUpdated()->getTimestamp(); ?></td><td>
+                            <a href="<?php echo ($this->url('admin/default', array('controller' => 'socialmediagateway', 'action'=>'edit')) . '/' . $gateway->getId() );?>">Edit</a> |
+                            <a href="<?php echo ($this->url('admin/default', array('controller' => 'socialmediagateway', 'action'=>'delete')) . '/' . $gateway->getId() );?>">Delete</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                <?php endforeach; ?>
+                </table>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+</div>

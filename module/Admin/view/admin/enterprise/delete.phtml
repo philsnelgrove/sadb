@@ -1,0 +1,15 @@
+<strong>Module:</strong>        Admin &raquo;
+<strong>Controller:</strong>    Enterprise &raquo;
+<strong>Action:</strong>        Delete
+</br>
+<?php
+
+$title = 'Delete Enterprise';
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+Are you sure you want to delete the Enterprise <?php echo $enterprise->getName(); ?>? <br/>
+<form method="post">
+  <input type="submit" value="Delete">
+</form>
+<a href='/admin/enterprise/index'>Back</a>

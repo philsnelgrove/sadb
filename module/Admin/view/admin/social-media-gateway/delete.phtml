@@ -1,0 +1,15 @@
+<strong>Module:</strong>        Admin &raquo;
+<strong>Controller:</strong>    SocialMediaGateway &raquo;
+<strong>Action:</strong>        Delete
+</br>
+<?php
+
+$title = 'Delete Social Media Gateway';
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+Are you sure you want to delete the Social Media Gateway <?php echo $gateway->getName(); ?>? <br/>
+<form method="post">
+  <input type="submit" value="Delete">
+</form>
+<a href='/admin/socialmediagateway/index'>Back</a>

@@ -9,31 +9,18 @@
 
 namespace Admin\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
+use Application\Controller\BaseController;
+use Application\Entity\SocialMediaGateway;
+use Zend\Form\Element;
+use Zend\Form\Form;
+use DoctrineModule\Stdlib\Hydrator\DoctrineObject;
+use Zend\View\Model\ViewModel;
 
-class AccessTokenController extends AbstractActionController
+class AccessTokenController extends BaseController
 {
     public function indexAction()
     {
-        return array();
-    }
-
-    public function editAction()
-    {
-        // This shows the :controller and :action parameters in default route
-        // are working when you browse to /index/index/foo
-        return array();
-    }
-    public function addAction()
-    {
-        // This shows the :controller and :action parameters in default route
-        // are working when you browse to /index/index/foo
-        return array();
-    }
-    public function deleteAction()
-    {
-        // This shows the :controller and :action parameters in default route
-        // are working when you browse to /index/index/foo
-        return array();
+        $tokens = $this->getObjectManager()->getRepository('\Application\Entity\AccessToken')->findAll();
+        return new ViewModel(array('tokens' => $tokens));
     }
 }
