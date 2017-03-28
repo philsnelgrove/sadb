@@ -1,0 +1,14 @@
+<strong>Module:</strong>        Admin &raquo;
+<strong>Controller:</strong>    User &raquo;
+<strong>Action:</strong>        Delete
+</br>
+<?php
+
+$title = 'Delete User';
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+Are you sure you want to delete user <?php echo $user->getUserName(); ?>? <br/>
+<form method="post">
+  <input type="submit" value="Delete">
+</form>

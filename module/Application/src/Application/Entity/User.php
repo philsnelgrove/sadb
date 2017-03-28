@@ -10,7 +10,7 @@ use ZfcUser\Entity\User as ZfcUser;
 class User extends ZfcUser {
         
     /** 
-     * @ORM\ManyToOne(targetEntity="Enterprise", inversedBy="users", cascade={"all"})
+     * @ORM\ManyToOne(targetEntity="Enterprise", inversedBy="users")
      * @ORM\JoinColumn(name="enterprise_id", referencedColumnName="id")
      */
     protected $enterprise;
@@ -29,6 +29,7 @@ class User extends ZfcUser {
     // getters/setters
     
     public function __construct(){
+        // parent::__construct();
         $this->created = new \DateTime();
         $this->last_updated = new \DateTime();
     }

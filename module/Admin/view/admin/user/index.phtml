@@ -1,0 +1,51 @@
+<strong>Module:</strong>        Admin &raquo;
+<strong>Controller:</strong>    User &raquo;
+<strong>Action:</strong>        Index
+</br>
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Users</h3>
+            </div>
+            <div class="panel-body">
+                <a href="<?php echo $this->url('admin/default', array('controller' => 'user', 'action'=>'add'));?>">Add User</a>
+
+                <?php if (isset($users)) : ?>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Display name</th>
+                        <th>Email</th>
+                        <th>State</th>
+                        <th>Username</th>
+                        <th>Enterprise</th>
+                        <th>Date Created</th>
+                        <th>Date last Updated</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                <?php foreach($users as $user): ?>
+                    <tbody>
+                    <tr>
+                        <td><?php echo $user->getId(); ?></td>
+                        <td><?php echo $user->getDisplayName(); ?></td>
+                        <td><?php echo $user->getEmail(); ?></td>
+                        <td><?php echo $user->getState(); ?></td>
+                        <td><?php echo $user->getUsername(); ?></td>
+                        <td><?php echo $user->getEnterprise()->getName(); ?></td>
+                        <td><?php echo $user->getCreated()->getTimestamp(); ?></td>
+                        <td><?php echo $user->getLastUpdated()->getTimestamp(); ?></td><td>
+                            <a href="<?php echo ($this->url('admin/default', array('controller' => 'user', 'action'=>'edit')) . '/' . $user->getId() );?>">Edit</a> |
+                            <a href="<?php echo ($this->url('admin/default', array('controller' => 'user', 'action'=>'delete')) . '/' . $user->getId() );?>">Delete</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                <?php endforeach; ?>
+                </table>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+</div>

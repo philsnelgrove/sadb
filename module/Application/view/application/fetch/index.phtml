@@ -1,15 +1,14 @@
+<strong>Module:</strong>        Application &raquo;
+<strong>Controller:</strong>    Fetch &raquo;
+<strong>Action:</strong>        index
+</br>
 <?php 
-$title = 'Fetch Metadata';
+$title = 'Fetch';
 $this->headTitle($title);
 ?>
 <h1><?php echo $this->escapeHtml($title); ?></h1>
-<?php
-$form = $this->form;
-$form->prepare();
-// $form->setAttribute('action', $this->url('fetch', array('action' => 'post')))->prepare();
-// $form->setAttribute('action', $this->url());
-// echo $this->form()->render($form);
-$form->setAttribute('method', 'post');
-// echo($this->url('application/default', array('controller'=>'fetch','action'=>'post')));
-$form->setAttribute('action', $this->url('application/default', array('controller'=>'fetch','action'=>'post')));
-echo $this->form($form);
+<h3>Fetch pages for:</h3>
+<a href='/application/fetch/user'>Current User</a></br>
+<h3>Fetch insights for:</h3>
+<a href='/application/fetch/page'>Page</a></br>
+<a href='/application/fetch/post'>Post</a></br>

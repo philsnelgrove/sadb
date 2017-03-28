@@ -305,9 +305,9 @@ class SetupController extends BaseController
             //                'default_access_token' => $app_id . '|' . $app_secret,
         ]);
         $helper = $fb->getRedirectLoginHelper();
-        // $permissions = [];
+        $permissions = ['manage_pages'];
         // $loginUrl = $helper->getLoginUrl('http://{your-website}/login-callback.php', $permissions);
-        $loginUrl = $helper->getLoginUrl('http://localhost/application/fetch/receive_token_callback');
+        $loginUrl = $helper->getLoginUrl('http://localhost/application/fetch/receive_token_callback', $permissions);
         return array('login_url' => $loginUrl);
     }
 }

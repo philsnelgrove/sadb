@@ -5,7 +5,6 @@ use Zend\Mvc\Controller\AbstractActionController;
 
 class BaseController extends AbstractActionController
 {
-
     /**
      * @var Doctrine\ORM\EntityManager
      */

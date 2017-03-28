@@ -9,6 +9,7 @@ use Zend\Form\Form;
 use Facebook\Facebook;
 use Zend\View\View;
 use Application\Entity\AccessToken;
+use Application\Entity\Page;
 
 /**
  * FetchController
@@ -19,55 +20,89 @@ use Application\Entity\AccessToken;
  *
  */
 class FetchController extends BaseController
-{
-
-    /**
-     * The default action - show the home page
-     */
+{    
     public function indexAction()
+    {
+        return;
+    }
+    
+    public function userAction()
+    {
+        $em = $this->getEntityManager();
+//         $formManager = $this->serviceLocator->get('FormElementManager');
+//         $form = $formManager->get('fetchForm');
+
+        $fb_query = '';
+        $app_id = '';
+        $app_secret = '';
+        $current_identity = $this->zfcUserAuthentication()->getIdentity();
+        $access_token = $current_identity->getAccessToken()->getToken();
+    
+        $myPresence = $em->getRepository('Application\Entity\SocialMediaPresence')->findOneBy(array('id'=>'1'));
+        $app_id = $myPresence->getSocialMediaGateway()->getAppId();
+        $app_secret = $myPresence->getSocialMediaGateway()->getAppSecret();
+        
+        $fb = new Facebook([
+            'app_id' => $app_id,
+            'app_secret' => $app_secret,
+            'default_graph_version' => 'v2.5',
+            'default_access_token' => $access_token,
+        ]);
+        
+        echo("Facebook query parameters are " . $fb_query . "</br>");
+        echo("Facebook app_id is " . $app_id . "</br>");
+        echo("Facebook app_secret is " . $app_secret . "</br>");
+        echo("Facebook access_token is " . $access_token . "</br>");
+        
+        try {
+            $response = $fb->get('/me/accounts');
+        } catch(\Facebook\Exceptions\FacebookResponseException $e) 
+        {
+            echo 'Graph returned an error: ' . $e->getMessage();
+            exit;
+        } catch(\Facebook\Exceptions\FacebookSDKException $e)
+        {
+            echo 'Facebook SDK returned an error: ' . $e->getMessage();
+            exit;
+        }
+        
+        $pages = $response->getDecodedBody();
+        foreach($pages['data'] as $page)
+        {
+            $myPage = new Page();
+            $myPage->setTitle($page['name']);
+            $myPage->setSocialMediaServiceId($page['id']);
+            $myPage->setSocialMediaPresence($myPresence);
+            $em->persist($myPage);
+        }
+        $em->flush();
+        return;
+    }
+    
+    public function pageAction()
     {
         $em = $this->getEntityManager();
         $formManager = $this->serviceLocator->get('FormElementManager');
         $form = $formManager->get('fetchForm');
-        
         $form->add(array(
-            'name' => 'enterprise',
+            'name' => 'page',
             'type' => 'DoctrineModule\Form\Element\ObjectSelect',
             'options' => array(
-                'label' => 'Enterprise',
+                'label' => 'Page',
                 'object_manager' => $em,
-                'target_class'   => 'Application\Entity\Enterprise',
-                'property'       => 'name',
-                'is_method'      => true,
-                'find_method'    => array(
-                    'name'   => 'findBy',
-                    'params' => array(
-                        'criteria' => array(),
-                        'orderBy'  => array('name' => 'ASC'),
-                    ),
-                ),
-            ),
-        ));
-        
-        $form->add(array(
-            'name' => 'presence',
-            'type' => 'DoctrineModule\Form\Element\ObjectSelect',
-            'options' => array(
-                'label' => 'Social Media Presence',
-                'object_manager' => $em,
-                'target_class'   => 'Application\Entity\SocialMediaPresence',
-                'property'       => 'name',
+                'target_class'   => 'Application\Entity\Page',
+                'property'       => 'title',
                 'is_method'      => true,
                 'find_method'    => array(
                     'name'   => 'findBy',
                     'params' => array(
                         'criteria' => array(), // <-- will be "enterprises this user is auth'd for"
-                        'orderBy'  => array('name' => 'ASC'),
+                        'orderBy'  => array('title' => 'ASC'),
                     ),
                 ),
             ),
         ));
-        
+    
         $form->add(array(
             'type' => 'DoctrineModule\Form\Element\ObjectMultiCheckbox',
             'name' => 'dimensionTable',
@@ -78,7 +113,53 @@ class FetchController extends BaseController
                 'property'       => 'name',
             )
         ));
-        
+    
+        $form->add(array(
+            'name' => 'submit',
+            'type' => 'Submit',
+            'attributes' => array(
+                'value' => 'Go',
+                'id' => 'submitbutton',
+            ),
+        ));    
+        return array('form' => $form);
+    }
+    
+    public function postAction()
+    {
+        $em = $this->getEntityManager();
+        $formManager = $this->serviceLocator->get('FormElementManager');
+        $form = $formManager->get('fetchForm');
+        $form->add(array(
+            'name' => 'post',
+            'type' => 'DoctrineModule\Form\Element\ObjectSelect',
+            'options' => array(
+                'label' => 'Post',
+                'object_manager' => $em,
+                'target_class'   => 'Application\Entity\Post',
+                'property'       => 'title',
+                'is_method'      => true,
+                'find_method'    => array(
+                    'name'   => 'findBy',
+                    'params' => array(
+                        'criteria' => array(), // <-- will be "enterprises this user is auth'd for"
+                        'orderBy'  => array('title' => 'ASC'),
+                    ),
+                ),
+            ),
+        ));
+
+        $form->add(array(
+            'type' => 'DoctrineModule\Form\Element\ObjectMultiCheckbox',
+            'name' => 'dimensionTable',
+            'options' => array(
+                'label' => 'Select dimensions to query',
+                'object_manager' => $em,
+                'target_class'   => 'Application\Entity\Dimension',
+                'property'       => 'name',
+            )
+        ));
+
         $form->add(array(
             'name' => 'submit',
             'type' => 'Submit',
@@ -87,13 +168,10 @@ class FetchController extends BaseController
                 'id' => 'submitbutton',
             ),
         ));
-        
-        // $form->setAttribute('action', $this->url('fetch', array('action' => 'post')))->prepare();
-        
         return array('form' => $form);
     }
     
-    public function postAction()
+    public function queryAction()
     {
         if (!session_id()) {
             session_start();
@@ -134,34 +212,34 @@ class FetchController extends BaseController
                     }
                 }
             }
-            $fb = new Facebook([
-                'app_id' => $app_id,
-                'app_secret' => $app_secret,
-                'default_graph_version' => 'v2.5',
-                'default_access_token' => $access_token,
-            ]);
+//             $fb = new Facebook([
+//                 'app_id' => $app_id,
+//                 'app_secret' => $app_secret,
+//                 'default_graph_version' => 'v2.5',
+//                 'default_access_token' => $access_token,
+//             ]);
             
-            echo("Facebook query parameters are " . $fb_query . "</br>");
-            echo("Facebook app_id is " . $app_id . "</br>");
-            echo("Facebook app_secret is " . $app_secret . "</br>");
-            echo("Facebook access_token is " . $access_token . "</br>");
+//             echo("Facebook query parameters are " . $fb_query . "</br>");
+//             echo("Facebook app_id is " . $app_id . "</br>");
+//             echo("Facebook app_secret is " . $app_secret . "</br>");
+//             echo("Facebook access_token is " . $access_token . "</br>");
             
-            try {
-                // Get the \Facebook\GraphNodes\GraphUser object for the current user.
-                // If you provided a 'default_access_token', the '{access-token}' is optional.
-                $response = $fb->get('/me');
-            } catch(\Facebook\Exceptions\FacebookResponseException $e) {
-                // When Graph returns an error
-                echo 'Graph returned an error: ' . $e->getMessage();
-                exit;
-            } catch(\Facebook\Exceptions\FacebookSDKException $e) {
-                // When validation fails or other local issues
-                echo 'Facebook SDK returned an error: ' . $e->getMessage();
-                exit;
-            }
+//             try {
+//                 // Get the \Facebook\GraphNodes\GraphUser object for the current user.
+//                 // If you provided a 'default_access_token', the '{access-token}' is optional.
+//                 $response = $fb->get('/me');
+//             } catch(\Facebook\Exceptions\FacebookResponseException $e) {
+//                 // When Graph returns an error
+//                 echo 'Graph returned an error: ' . $e->getMessage();
+//                 exit;
+//             } catch(\Facebook\Exceptions\FacebookSDKException $e) {
+//                 // When validation fails or other local issues
+//                 echo 'Facebook SDK returned an error: ' . $e->getMessage();
+//                 exit;
+//             }
             
-            $me = $response->getGraphUser();
-            echo 'Logged in as ' . $me->getName();
+//             $me = $response->getGraphUser();
+//             echo 'Logged in as ' . $me->getName();
         };
     }
     
