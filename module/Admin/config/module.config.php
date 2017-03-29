@@ -60,6 +60,26 @@ return array(
                     ),
                 ),
             ),
+            'pagelist' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/admin/page/index',
+                    'defaults' => array(
+                        'controller' => 'Admin\Controller\Page',
+                        'action'     => 'index',
+                    ),
+                ),
+            ),
+            'postlist' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/admin/post/index',
+                    'defaults' => array(
+                        'controller' => 'Admin\Controller\Post',
+                        'action'     => 'index',
+                    ),
+                ),
+            ),
             'admin' => array(
                 'type'    => 'Literal',
                 'options' => array(

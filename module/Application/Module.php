@@ -69,9 +69,15 @@ class Module
                 }
             ),
             'factories' => array(
-                'fetchForm' => function($sm) {
-                    $form = new Form\FetchForm();
-                    $form->setInputFilter(new \Application\Form\FetchFilter);
+                'PostFetchForm' => function($sm) {
+                    $form = new Form\PostFetchForm();
+                    // $form->setInputFilter(new \Application\Form\FetchFilter);
+                    $form->setHydrator(new \Zend\Stdlib\Hydrator\ObjectProperty());
+                    return $form;
+                },
+                'PageFetchForm' => function($sm) {
+                    $form = new Form\PageFetchForm();
+                    // $form->setInputFilter(new \Application\Form\FetchFilter);
                     $form->setHydrator(new \Zend\Stdlib\Hydrator\ObjectProperty());
                     return $form;
                 },

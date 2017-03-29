@@ -112,6 +112,18 @@ class Module implements AutoloaderProviderInterface
                     $form->setHydrator(new \Zend\Stdlib\Hydrator\ObjectProperty());
                     return $form;
                 },
+                'pageAddForm' => function ($sm) {
+                    $form = new Form\PageAddForm();
+                    // $form->setInputFilter(new \Admin\Form\FetchFilter);
+                    $form->setHydrator(new \Zend\Stdlib\Hydrator\ObjectProperty());
+                    return $form;
+                },
+                'pageEditForm' => function ($sm) {
+                    $form = new Form\PageEditForm();
+                    // $form->setInputFilter(new \Admin\Form\FetchFilter);
+                    $form->setHydrator(new \Zend\Stdlib\Hydrator\ObjectProperty());
+                    return $form;
+                },
             ),
         );
     }

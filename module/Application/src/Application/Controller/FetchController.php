@@ -83,21 +83,21 @@ class FetchController extends BaseController
     {
         $em = $this->getEntityManager();
         $formManager = $this->serviceLocator->get('FormElementManager');
-        $form = $formManager->get('fetchForm');
+        $form = $formManager->get('PageFetchForm');
         $form->add(array(
             'name' => 'page',
             'type' => 'DoctrineModule\Form\Element\ObjectSelect',
             'options' => array(
-                'label' => 'Page',
+                'label' => 'Social Media Presence',
                 'object_manager' => $em,
-                'target_class'   => 'Application\Entity\Page',
-                'property'       => 'title',
+                'target_class'   => 'Application\Entity\SocialMediaPresence',
+                'property'       => 'name',
                 'is_method'      => true,
                 'find_method'    => array(
                     'name'   => 'findBy',
                     'params' => array(
                         'criteria' => array(), // <-- will be "enterprises this user is auth'd for"
-                        'orderBy'  => array('title' => 'ASC'),
+                        'orderBy'  => array('name' => 'ASC'),
                     ),
                 ),
             ),
@@ -129,14 +129,14 @@ class FetchController extends BaseController
     {
         $em = $this->getEntityManager();
         $formManager = $this->serviceLocator->get('FormElementManager');
-        $form = $formManager->get('fetchForm');
+        $form = $formManager->get('PostFetchForm');
         $form->add(array(
-            'name' => 'post',
+            'name' => 'page',
             'type' => 'DoctrineModule\Form\Element\ObjectSelect',
             'options' => array(
                 'label' => 'Post',
                 'object_manager' => $em,
-                'target_class'   => 'Application\Entity\Post',
+                'target_class'   => 'Application\Entity\Page',
                 'property'       => 'title',
                 'is_method'      => true,
                 'find_method'    => array(

@@ -5,7 +5,7 @@ use Zend\Form\Form;
 use Zend\Form\Element;
 use Zend\Form\Fieldset;
 
-class FetchForm extends Form
+class PageFetchForm extends Form
 {
     public function __construct()
     {
