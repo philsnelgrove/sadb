@@ -14,14 +14,12 @@ class PageDimension {
     protected $id;
     
     /** 
-     * @ORM\ManyToOne(targetEntity="Page", inversedBy="posts")
+     * @ORM\ManyToOne(targetEntity="Page", inversedBy="insights")
      * @ORM\JoinColumn(name="social_media_presence_id", referencedColumnName="id")
      */
     protected $page;
     
-    /**
-     * @ORM\OneToOne(targetEntity="Dimension")
-     */
+    /** @ORM\Column(type="string") */
     protected $dimension;
         
     /** @ORM\Column(type="string") */
@@ -135,10 +133,10 @@ class PageDimension {
     /**
      * Set dimension
      *
-     * @param \Application\Entity\Dimension $dimension
+     * @param string $dimension
      * @return PageDimension
      */
-    public function setDimension(\Application\Entity\Dimension $dimension = null)
+    public function setDimension($dimension)
     {
         $this->dimension = $dimension;
         $this->last_updated = new \DateTime();

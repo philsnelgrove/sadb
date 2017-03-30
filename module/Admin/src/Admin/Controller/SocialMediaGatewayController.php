@@ -64,21 +64,15 @@ class SocialMediaGatewayController extends BaseController
         if ($this->request->isPost()) {
             if($this->getRequest()->getPost('name'))
                 $gateway->setName($this->getRequest()->getPost('name'));
-            if($this->getRequest()->getPost('enterprise'))
+            if($this->getRequest()->getPost('presence'))
             {
-                $enterprise = $this->getObjectManager()->getRepository('\Application\Entity\Enterprise')->findOneBy(array('id'=>$this->getRequest()->getPost('enterprise')));
-                $gateway->setParentEnterprise($enterprise);
-                $enterprise->addSocialMediaGateway($gateway);
-            }
-            if($this->getRequest()->getPost('gateway'))
-            {
-                $gateway = $this->getObjectManager()->getRepository('\Application\Entity\SocialMediaGateway')->findOneBy(array('id'=>$this->getRequest()->getPost('gateway')));
-                $gateway->setSocialMediaGateway($gateway);
+                $presence = $this->getObjectManager()->getRepository('\Application\Entity\SocialMediaPresence')->findOneBy(array('id'=>$this->getRequest()->getPost('presence')));
+                $gateway->setSocialMediaPresence($presence);
+                $presence->setSocialMediaGateway($gateway);
             }
 
             $this->getObjectManager()->persist($gateway);
-            $this->getObjectManager()->persist($gateway);
-            $this->getObjectManager()->persist($enterprise);
+            $this->getObjectManager()->persist($presence);
             $this->getObjectManager()->flush();
 
             return $this->redirect()->toRoute('gatewaylist');
@@ -87,31 +81,14 @@ class SocialMediaGatewayController extends BaseController
         $em = $this->getEntityManager();
         $formManager = $this->serviceLocator->get('FormElementManager');
         $form = $formManager->get('socialMediaGatewayEditForm');
+        
         $form->add(array(
-            'name' => 'enterprise',
+            'name' => 'presence',
             'type' => 'DoctrineModule\Form\Element\ObjectSelect',
             'options' => array(
-                'label' => 'Enterprise',
+                'label' => 'Social Media Presence',
                 'object_manager' => $em,
-                'target_class'   => 'Application\Entity\Enterprise',
-                'property'       => 'name',
-                'is_method'      => true,
-                'find_method'    => array(
-                    'name'   => 'findBy',
-                    'params' => array(
-                        'criteria' => array(), // <-- will be "enterprises this user is auth'd for"
-                        'orderBy'  => array('name' => 'ASC'),
-                    ),
-                ),
-            ),
-        ));
-        $form->add(array(
-            'name' => 'gateway',
-            'type' => 'DoctrineModule\Form\Element\ObjectSelect',
-            'options' => array(
-                'label' => 'Social Media Gateway',
-                'object_manager' => $em,
-                'target_class'   => 'Application\Entity\SocialMediaGateway',
+                'target_class'   => 'Application\Entity\SocialMediaPresence',
                 'property'       => 'name',
                 'is_method'      => true,
                 'find_method'    => array(

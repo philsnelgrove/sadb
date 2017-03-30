@@ -1,5 +1,5 @@
 <strong>Module:</strong>        Admin &raquo;
-<strong>Controller:</strong>    Page &raquo;
+<strong>Controller:</strong>    Post &raquo;
 <strong>Action:</strong>        Index
 </br>
 <div class="row">
@@ -9,33 +9,28 @@
                 <h3 class="panel-title">Pages</h3>
             </div>
             <div class="panel-body">
-                <a href="<?php echo $this->url('admin/default', array('controller' => 'page', 'action'=>'add'));?>">Add Page</a>
-
-                <?php if (isset($pages)) : ?>
+                <?php if (isset($posts)) : ?>
                 <table class="table">
                     <thead>
                     <tr>
                         <th>Id</th>
                         <th>Title</th>
-                        <th>Social Media Presence</th>
+                        <th>Page</th>
                         <th>SM Service ID</th>
                         <th>Date Created</th>
                         <th>Date last Updated</th>
                         <th></th>
                     </tr>
                     </thead>
-                <?php foreach($pages as $page): ?>
+                <?php foreach($posts as $post): ?>
                     <tbody>
                     <tr>
-                        <td><?php echo $page->getId(); ?></td>
-                        <td><?php echo $page->getTitle(); ?></td>
-                        <td><?php echo $page->getSocialMediaPresence()->getName(); ?></td>
-                        <td><?php echo $page->getSocialMediaServiceId(); ?></td>
-                        <td><?php echo $page->getCreated()->getTimestamp(); ?></td>
-                        <td><?php echo $page->getLastUpdated()->getTimestamp(); ?></td><td>
-                            <a href="<?php echo ($this->url('admin/default', array('controller' => 'page', 'action'=>'edit')) . '/' . $page->getId() );?>">Edit</a> |
-                            <a href="<?php echo ($this->url('admin/default', array('controller' => 'page', 'action'=>'delete')) . '/' . $page->getId() );?>">Delete</a>
-                        </td>
+                        <td><?php echo $post->getId(); ?></td>
+                        <td><?php echo $post->getTitle(); ?></td>
+                        <td><?php echo $post->getPage()->getTitle(); ?></td>
+                        <td><?php echo $post->getSocialMediaServiceId(); ?></td>
+                        <td><?php echo $post->getCreated()->getTimestamp(); ?></td>
+                        <td><?php echo $post->getLastUpdated()->getTimestamp(); ?></td>
                     </tr>
                     </tbody>
                 <?php endforeach; ?>

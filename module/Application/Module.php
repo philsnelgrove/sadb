@@ -81,6 +81,24 @@ class Module
                     $form->setHydrator(new \Zend\Stdlib\Hydrator\ObjectProperty());
                     return $form;
                 },
+                'FetchPostsByPageForm' => function($sm) {
+                    $form = new Form\FetchPostsByPageForm();
+                    // $form->setInputFilter(new \Application\Form\FetchFilter);
+                    $form->setHydrator(new \Zend\Stdlib\Hydrator\ObjectProperty());
+                    return $form;
+                },
+                'PostReportForm' => function($sm) {
+                    $form = new Form\PostReportForm();
+                    // $form->setInputFilter(new \Application\Form\FetchFilter);
+                    $form->setHydrator(new \Zend\Stdlib\Hydrator\ObjectProperty());
+                    return $form;
+                },
+                'PageReportForm' => function($sm) {
+                    $form = new Form\PageReportForm();
+                    // $form->setInputFilter(new \Application\Form\FetchFilter);
+                    $form->setHydrator(new \Zend\Stdlib\Hydrator\ObjectProperty());
+                    return $form;
+                },
             ),
         );
     }

@@ -16,11 +16,11 @@ class Post {
     /** @ORM\Column(type="string") */
     protected $social_media_service_id;
     
-    /** @ORM\Column(type="string") */
+    /** @ORM\Column(type="text") */
     protected $title;
     
     /** 
-     * @ORM\ManyToOne(targetEntity="Page", inversedBy="pages")
+     * @ORM\ManyToOne(targetEntity="Page", inversedBy="posts")
      * @ORM\JoinColumn(name="page_id", referencedColumnName="id")
      */
     protected $page;

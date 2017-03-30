@@ -14,14 +14,12 @@ class PostDimension {
     protected $id;
     
     /** 
-     * @ORM\ManyToOne(targetEntity="Post", inversedBy="posts")
+     * @ORM\ManyToOne(targetEntity="Post", inversedBy="insights")
      * @ORM\JoinColumn(name="social_media_presence_id", referencedColumnName="id")
      */
     protected $post;
     
-    /**
-     * @ORM\OneToOne(targetEntity="Dimension")
-     */
+    /** @ORM\Column(type="string") */
     protected $dimension;
         
     /** @ORM\Column(type="string") */
@@ -37,6 +35,7 @@ class PostDimension {
     
     public function __construct(){
         $this->created = new \DateTime();
+        $this->last_updated = new \DateTime();
     }
     
     /**
@@ -134,10 +133,10 @@ class PostDimension {
     /**
      * Set dimension
      *
-     * @param \Application\Entity\Dimension $dimension
+     * @param string $dimension
      * @return PostDimension
      */
-    public function setDimension(\Application\Entity\Dimension $dimension = null)
+    public function setDimension($dimension)
     {
         $this->dimension = $dimension;
         $this->last_updated = new \DateTime();

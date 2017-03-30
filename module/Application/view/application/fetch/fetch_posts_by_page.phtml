@@ -1,5 +1,5 @@
 <?php 
-$title = 'Fetch Page Insights';
+$title = 'Fetch Post By Page';
 $this->headTitle($title);
 ?>
 <h1><?php echo $this->escapeHtml($title); ?></h1>
@@ -11,5 +11,5 @@ $form->prepare();
 // echo $this->form()->render($form);
 $form->setAttribute('method', 'post');
 // echo($this->url('application/default', array('controller'=>'fetch','action'=>'post')));
-$form->setAttribute('action', $this->url('application/default', array('controller'=>'fetch','action'=>'page')));
+$form->setAttribute('action', $this->url('application/default', array('controller'=>'fetch','action'=>'fetch_posts_by_page')));
 echo $this->form($form);

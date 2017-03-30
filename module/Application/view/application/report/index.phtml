@@ -3,5 +3,6 @@ $title = 'Generate report';
 $this->headTitle($title);
 ?>
 <h1><?php echo $this->escapeHtml($title); ?></h1>
-<?php
-echo("Generate report: select the report below to download");
+<h3>Form report for:</h3>
+<a href='/application/report/post'>Post Insights</a></br>
+<a href='/application/report/page'>Page Insights</a></br>

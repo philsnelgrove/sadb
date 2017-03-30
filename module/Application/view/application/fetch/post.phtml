@@ -11,5 +11,5 @@ $form->prepare();
 // echo $this->form()->render($form);
 $form->setAttribute('method', 'post');
 // echo($this->url('application/default', array('controller'=>'fetch','action'=>'post')));
-$form->setAttribute('action', $this->url('application/default', array('controller'=>'fetch','action'=>'query')));
+$form->setAttribute('action', $this->url('application/default', array('controller'=>'fetch','action'=>'post')));
 echo $this->form($form);

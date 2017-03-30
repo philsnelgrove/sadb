@@ -9,6 +9,7 @@ use Application\Entity\Enterprise;
 use Application\Entity\AccessToken;
 use Application\Entity\SocialMediaGateway;
 use Application\Entity\SocialMediaPresence;
+use Zend\Crypt\Password\Bcrypt;
 
 /**
  * SetupController
@@ -175,6 +176,8 @@ class SetupController extends BaseController
         }
         else
         {
+            $bcrypt = new Bcrypt;
+            $bcrypt->setCost(14);
             foreach ($user_array as $user)
             {
                 $myUser = new User();
@@ -182,7 +185,7 @@ class SetupController extends BaseController
                 $myUser->setUsername($user['username']);
                 $myUser->setEmail($user['email']);
                 $myUser->setDisplayname($user['display_name']);
-                $myUser->setPassword($user['password']);
+                $myUser->setPassword($bcrypt->create($user['password']));
         
                 $this->getEntityManager()->persist($myUser);
             }
@@ -301,11 +304,11 @@ class SetupController extends BaseController
         $fb = new \Facebook\Facebook([
             'app_id' => $app_id,
             'app_secret' => $app_secret,
-            'default_graph_version' => 'v2.5',
+            'default_graph_version' => 'v2.8',
             //                'default_access_token' => $app_id . '|' . $app_secret,
         ]);
         $helper = $fb->getRedirectLoginHelper();
-        $permissions = ['manage_pages'];
+        $permissions = ['manage_pages','read_insights'];
         // $loginUrl = $helper->getLoginUrl('http://{your-website}/login-callback.php', $permissions);
         $loginUrl = $helper->getLoginUrl('http://localhost/application/fetch/receive_token_callback', $permissions);
         return array('login_url' => $loginUrl);
