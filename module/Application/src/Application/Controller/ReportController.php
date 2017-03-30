@@ -26,37 +26,10 @@ class ReportController extends BaseController
     
     public function postAction()
     {
-        $em = $this->getEntityManager();
-        if ($this->request->isPost()) {
-            $route='home';
-            // $current_identity = $this->zfcUserAuthentication()->getIdentity();
-            
-            $requestPost = $this->getRequest()->getPost();
-            $postId = $this->getRequest()->getPost('post');
-            $dimensionIdArray = $this->getRequest()->getPost('dimensionTable');
-            $dimensionArray = [];
-            $startDate = $this->getRequest()->getPost('startdate');
-            $endDate = $this->getRequest()->getPost('enddate');
-            
-            $post = $em->getRepository('Application\Entity\Post')->findOneBy(array('id'=>$postId));
-            
-            // echo("Post ID:" . $postId . "</br>");
-            echo("Post:" . $post->getTitle() . "</br>");
-            foreach($dimensionIdArray as $key => $dimension)
-            {
-                $myDimension = $em->getRepository('Application\Entity\Dimension')->findOneBy(array('id'=>$dimension));
-                array_push($dimensionArray, $myDimension);
-                echo("Dimension ID:" . $myDimension->getName() . "</br>");
-            }
-            echo("Start Date:" . $startDate . "</br>");
-            echo("End Date:" . $endDate . "</br>");
-            
-            // replace this with a query builder assembly that considers all criteria for the result set
-            $resultArray = $em->getRepository('Application\Entity\PostDimension')->findBy(array('post'=>$post));
-            
-            return $this->redirect()->toRoute($route);
+        if (!session_id()) {
+            session_start();
         }
-        // $em = $this->getEntityManager();
+        $em = $this->getEntityManager();
         $formManager = $this->serviceLocator->get('FormElementManager');
         $form = $formManager->get('PostReportForm');
         $form->add(array(
@@ -131,38 +104,114 @@ class ReportController extends BaseController
         return new ViewModel();
     }
     
-    protected function csvAction($filename, $resultset)
+    protected function csvAction()
     {
+        if (!session_id()) {
+            session_start();
+        }
+        $em = $this->getEntityManager();
+        if ($this->request->isPost()) {
+//             $route='csv';
+            $filename='default_report.csv';
+            // $requestPost = $this->getRequest()->getPost();
+            $postId = $this->getRequest()->getPost('post');
+//             $dimensionIdArray = $this->getRequest()->getPost('dimensionTable');
+//             $dimensionArray = [];
+            $startDate = new \DateTime($this->getRequest()->getPost('startdate'));
+            $endDate = new \DateTime($this->getRequest()->getPost('enddate'));
+            $resultset = [];
+            $post = $em->getRepository('Application\Entity\Post')->findOneBy(array('id'=>$postId));
+        
+            $result = $em->getRepository('Application\Entity\PostDimension')->findBy(array('post'=>$post), array('last_updated'=>'ASC'));
+            array_push($resultset, array('post id', 'dimension', 'value', 'date collected'));
+            foreach($result as $key => $postDimension)
+            {
+                if($postDimension->getLastUpdated() >= $startDate && $postDimension->getLastUpdated() <= $endDate)
+                {
+                    array_push($resultset, array(
+                        $postDimension->getPost()->getSocialMediaServiceId(),
+                        $postDimension->getDimension(),
+                        $postDimension->getValue(),
+                        $postDimension->getLastUpdated()->format('Y-m-d')
+                    ));
+                }
+            }
+        }
+        $filename = 'test_report.csv';
+        $view = new ViewModel();
+        $view->setTemplate('download/download-csv')
+            ->setVariable('results', $resultset)
+            ->setTerminal(true);
+        $output = $this->getServiceLocator()
+            ->get('viewrenderer')
+            ->render($view);
+
+        $response = $this->getResponse();
+        $headers = $response->getHeaders();
+        $headers->addHeaderLine('Content-Type', 'text/csv')
+            ->addHeaderLine(
+                'Content-Disposition',
+                sprintf("attachment; filename=\"%s\"", $filename)
+            )
+            ->addHeaderLine('Accept-Ranges', 'bytes')
+            ->addHeaderLine('Content-Length', strlen($output)
+        );
+        $response->setContent($output);
+        return $response;
+    }
+    protected function jsonAction()
+    {
+        if (!session_id()) {
+            session_start();
+        }
+        $em = $this->getEntityManager();
+        if ($this->request->isPost()) {
+            //             $route='csv';
+            $filename='default_report.csv';
+            // $requestPost = $this->getRequest()->getPost();
+            $postId = $this->getRequest()->getPost('post');
+            //             $dimensionIdArray = $this->getRequest()->getPost('dimensionTable');
+            //             $dimensionArray = [];
+            $startDate = new \DateTime($this->getRequest()->getPost('startdate'));
+            $endDate = new \DateTime($this->getRequest()->getPost('enddate'));
+            $resultset = [];
+            $post = $em->getRepository('Application\Entity\Post')->findOneBy(array('id'=>$postId));
+    
+            $result = $em->getRepository('Application\Entity\PostDimension')->findBy(array('post'=>$post), array('last_updated'=>'ASC'));
+            array_push($resultset, array('post id', 'dimension', 'value', 'date collected'));
+            foreach($result as $key => $postDimension)
+            {
+                if($postDimension->getLastUpdated() >= $startDate && $postDimension->getLastUpdated() <= $endDate)
+                {
+                    array_push($resultset, array(
+                        $postDimension->getPost()->getSocialMediaServiceId(),
+                        $postDimension->getDimension(),
+                        $postDimension->getValue(),
+                        $postDimension->getLastUpdated()->format('Y-m-d')
+                    ));
+                }
+            }
+        }
+        $filename = 'test_report.csv';
         $view = new ViewModel();
         $view->setTemplate('download/download-csv')
         ->setVariable('results', $resultset)
         ->setTerminal(true);
-    
-        if (!empty($columnHeaders)) {
-            $view->setVariable(
-    
-                'columnHeaders', $columnHeaders
-                );
-        }
-    
         $output = $this->getServiceLocator()
         ->get('viewrenderer')
         ->render($view);
     
         $response = $this->getResponse();
-    
         $headers = $response->getHeaders();
         $headers->addHeaderLine('Content-Type', 'text/csv')
         ->addHeaderLine(
-    
             'Content-Disposition',
             sprintf("attachment; filename=\"%s\"", $filename)
             )
             ->addHeaderLine('Accept-Ranges', 'bytes')
-            ->addHeaderLine('Content-Length', strlen($output));
-    
+            ->addHeaderLine('Content-Length', strlen($output)
+                );
             $response->setContent($output);
-    
             return $response;
     }
 }

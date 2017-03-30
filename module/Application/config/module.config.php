@@ -20,6 +20,17 @@ return array(
                     ),
                 ),
             ),
+            'csv' => array(
+                'type' => 'Segment',
+                'options' => array(
+                'route'    => '/report/csv[/:parameter]',
+                    //'route'    => '/[:controller[/:action[/:parameter]]]',
+                'defaults' => array(
+                        'controller' => 'Application\Controller\Report',
+                        'action'     => 'csv',
+                    ),
+                ),
+            ),
             // The following is a route to simplify getting started creating
             // new controllers and actions without needing to create a new
             // module. Simply drop new controllers in, and you can access them
