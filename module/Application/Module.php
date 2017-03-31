@@ -99,6 +99,12 @@ class Module
                     $form->setHydrator(new \Zend\Stdlib\Hydrator\ObjectProperty());
                     return $form;
                 },
+                'PresenceAddForm' => function($sm) {
+                    $form = new Form\PresenceAddForm();
+                    // $form->setInputFilter(new \Application\Form\FetchFilter);
+                    $form->setHydrator(new \Zend\Stdlib\Hydrator\ObjectProperty());
+                return $form;
+                },
             ),
         );
     }

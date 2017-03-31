@@ -124,7 +124,6 @@ class SetupController extends BaseController
                 $this->getEntityManager()->persist($myDimension);
             }
             $this->getEntityManager()->flush();
-//             var_dump($dimension_array);
             echo("</br>dimension model populated");
         }
     }
@@ -133,9 +132,10 @@ class SetupController extends BaseController
         $user_array = array(
             1=>array(
                 'enterprise_id'=>1,
-                'username'=>"admin",
-                'email'=>"admin@email.com",
-                'display_name'=>"Administrator",
+                'username'=>"phil",
+                'state'=>1,
+                'email'=>"mikdrad@yahoo.com",
+                'display_name'=>"Phil",
                 'password'=>"password"
             ),
         );
@@ -149,29 +149,22 @@ class SetupController extends BaseController
         $myEnterprise = new Enterprise();
         if($testEnterprise)
         {
-            // var_dump($testEnterprise);
-            $myEnterprise=$testEnterprise;
             echo("Enterprise generation already performed</br>");
         }
         else
         {
             foreach ($enterprise_array as $enterprise)
             {
-//                 $myEnterprise = new Enterprise();
                 $myEnterprise->setName($enterprise['name']);
-        
                 $this->getEntityManager()->persist($myEnterprise);
             }
             $this->getEntityManager()->flush();
-            // var_dump($myEnterprise);
             echo("enterprise model populated</br>");
         }
         
         $testUser = $em->getRepository('Application\Entity\User')->findOneBy(array('username'=>'admin'));
         if($testUser)
         {
-            // echo("Dimension population already performed:");
-            //var_dump($testUser);
             echo("User generation already performed</br>");
         }
         else
@@ -184,114 +177,125 @@ class SetupController extends BaseController
                 $myUser->setEnterprise($myEnterprise);
                 $myUser->setUsername($user['username']);
                 $myUser->setEmail($user['email']);
-                $myUser->setDisplayname($user['display_name']);
+                $myUser->setDisplayName($user['display_name']);
                 $myUser->setPassword($bcrypt->create($user['password']));
         
                 $this->getEntityManager()->persist($myUser);
             }
             $this->getEntityManager()->flush();
-            // var_dump($myUser);
             echo("user model populated</br>");
         }
+        return;
     }
     
     public function socialMediaAction()
     {
-        $config = $this->getServiceLocator()->get('Config');
         $em = $this->getEntityManager();
-        
-        $token_array = array(
-            1=>array(
-                'token'=>'1234',
-            ),
-        );
-        $gateway_array = array(
-            1=>array(
-                'name'=>"Facebook",
-                'app_id'=>$config['facebook_constants']['test_page']['app_id'],
-                'app_secret'=>$config['facebook_constants']['test_page']['app_secret'],
-            ),
-        );
-        $presence_array = array(
-            1=>array(
-                'name'=>"Test Facebook Page",
-            ),
-        );
-        
-        $testToken = $em->getRepository('Application\Entity\AccessToken')->findOneBy(array('token'=>'1234'));
-        $myToken = new AccessToken();
-        if($testToken)
+        if($this->request->isPost())
         {
-            $myToken=$testToken;
-            echo("Token generation already performed</br>");
-        }
-        else
-        {
-            foreach ($token_array as $token)
+            $config = $this->getServiceLocator()->get('Config');
+            
+            $token_array = array(
+                1=>array(
+                    'token'=>'1234',
+                ),
+            );
+            $gateway_array = array(
+                1=>array(
+                    'name'=>"Facebook",
+                    'app_id'=>$this->request->getPost('appid'),
+                    'app_secret'=>$this->request->getPost('appsecret'),
+                ),
+            );
+            $presence_array = array(
+                1=>array(
+                    'name'=>"Test Facebook Page",
+                ),
+            );
+            
+            $testToken = $em->getRepository('Application\Entity\AccessToken')->findOneBy(array('token'=>'1234'));
+            $myToken = new AccessToken();
+            if($testToken)
             {
-                //                 $myEnterprise = new Enterprise();
-                $myToken->setToken($token['token']);
-                $em->persist($myToken);
+                $myToken=$testToken;
+                echo("Token generation already performed</br>");
             }
-//            $this->getEntityManager()->flush();
-            echo("token model populated</br>");
-        }
-        
-        $testGateway = $em->getRepository('Application\Entity\SocialMediaGateway')->findOneBy(array('name'=>'Facebook'));
-        $myGateway = new SocialMediaGateway();
-        if($testGateway)
-        {
-            $myGateway=$testGateway;
-            echo("Social Media Gateway generation already performed</br>");
-        }
-        else
-        {
-            foreach ($gateway_array as $gateway)
+            else
             {
-                $myGateway->setAccessToken($myToken);
-                $myGateway->setAppId($gateway['app_id']);
-                $myGateway->setAppSecret($gateway['app_secret']);
-                $myGateway->setName($gateway['name']);
-                
-                $myToken->setSocialMediaGateway($myGateway);
-                $em->persist($myGateway);
-                $em->persist($myToken);
+                foreach ($token_array as $token)
+                {
+                    $myToken->setToken($token['token']);
+                    $em->persist($myToken);
+                }
+                echo("token model populated</br>");
             }
-            // $em->flush();
-            echo("Social Media Gateway model populated</br>");
-        }
-        
-        $testPresence = $em->getRepository('Application\Entity\SocialMediaPresence')->findOneBy(array('name'=>'Test Facebook Page'));
-        $myPresence = new SocialMediaPresence();
-        if($testPresence)
-        {
-            $myPresence=$testPresence;
-            echo("Social Media Presence generation already performed</br>");
-            var_dump($myPresence);
-        }
-        else
-        {
-            $testEnterprise = $em->getRepository('Application\Entity\Enterprise')->findOneBy(array('name'=>'SADB Application Administration'));
-            foreach ($presence_array as $presence)
+            
+            $testGateway = $em->getRepository('Application\Entity\SocialMediaGateway')->findOneBy(array('name'=>'Facebook'));
+            $myGateway = new SocialMediaGateway();
+            if($testGateway)
             {
-                $myPresence->setName($presence['name']);
-                $myPresence->setSocialMediaGateway($myGateway);
-                $myPresence->setParentEnterprise($testEnterprise);
-        
-                $myGateway->setSocialMediaPresence($myPresence);
-                $testEnterprise->addSocialMediaPresence($myPresence);
-                $em->persist($myPresence);
-                $em->persist($testEnterprise);
+                $myGateway=$testGateway;
+                echo("Social Media Gateway generation already performed</br>");
             }
-            // $em->flush();
-            echo("Social Media Presence model populated</br>");
+            else
+            {
+                foreach ($gateway_array as $gateway)
+                {
+                    $myGateway->setAccessToken($myToken);
+                    $myGateway->setAppId($gateway['app_id']);
+                    $myGateway->setAppSecret($gateway['app_secret']);
+                    $myGateway->setName($gateway['name']);
+                    
+                    $myToken->setSocialMediaGateway($myGateway);
+                    $em->persist($myGateway);
+                    $em->persist($myToken);
+                }
+                // $em->flush();
+                echo("Social Media Gateway model populated</br>");
+            }
+            
+            $testPresence = $em->getRepository('Application\Entity\SocialMediaPresence')->findOneBy(array('name'=>'Test Facebook Page'));
+            $myPresence = new SocialMediaPresence();
+            if($testPresence)
+            {
+                $myPresence=$testPresence;
+                echo("Social Media Presence generation already performed</br>");
+                var_dump($myPresence);
+            }
+            else
+            {
+                $testEnterprise = $em->getRepository('Application\Entity\Enterprise')->findOneBy(array('name'=>'SADB Application Administration'));
+                foreach ($presence_array as $presence)
+                {
+                    $myPresence->setName($presence['name']);
+                    $myPresence->setSocialMediaGateway($myGateway);
+                    $myPresence->setParentEnterprise($testEnterprise);
+            
+                    $myGateway->setSocialMediaPresence($myPresence);
+                    $testEnterprise->addSocialMediaPresence($myPresence);
+                    $em->persist($myPresence);
+                    $em->persist($testEnterprise);
+                }
+                // $em->flush();
+                echo("Social Media Presence model populated</br>");
+            }
+            $em->flush();
         }
-        $em->flush();
+        $formManager = $this->serviceLocator->get('FormElementManager');
+        $form = $formManager->get('PresenceAddForm');
+        
+        $form->add(array(
+            'name' => 'submit',
+            'type' => 'Submit',
+            'attributes' => array(
+                'value' => 'Go',
+                'id' => 'submitbutton',
+            ),
+        ));
+        
+        return array('form' => $form);
     }
-    private function populateEntity()
-    {
-        //
-    }
+
     public function getFacebookTokenAction()
     {
         if (!session_id()) {
@@ -305,11 +309,9 @@ class SetupController extends BaseController
             'app_id' => $app_id,
             'app_secret' => $app_secret,
             'default_graph_version' => 'v2.8',
-            //                'default_access_token' => $app_id . '|' . $app_secret,
         ]);
         $helper = $fb->getRedirectLoginHelper();
         $permissions = ['manage_pages','read_insights'];
-        // $loginUrl = $helper->getLoginUrl('http://{your-website}/login-callback.php', $permissions);
         $loginUrl = $helper->getLoginUrl('http://localhost/application/fetch/receive_token_callback', $permissions);
         return array('login_url' => $loginUrl);
     }
