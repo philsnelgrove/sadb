@@ -270,60 +270,50 @@ class ReportController extends BaseController
             session_start();
         }
         
-        // $sourceArray = array(array("item 1"=>"value 1", "item 2"=>"value 2"), array("item 3"=>"value 3", "item 4"=>"value 4"));
-        // $testerz = new JsonModel($sourceArray);
-        
-        // return($testerz);
-        
-        // ***************************
         $em = $this->getEntityManager();
-//         if ($this->request->isPost()) 
+        if ($this->request->isPost()) 
+        {
+//         if ($this->request->isPost())
 //         {
-            $filename = 'default_report.csv';
-            $postId = $this->getRequest()->getPost('post');
-            $startDate = new \DateTime($this->getRequest()->getPost('startdate'));
-            $endDate = new \DateTime($this->getRequest()->getPost('enddate'));
+            $postId = $this->params()->fromPost('post');
+            $startDate = new \DateTime($this->params()->fromPost('startdate'));
+            $endDate = new \DateTime($this->params()->fromPost('enddate'));
+//         }
+//         else 
+//         {
+//             $postId = $this->params()->fromQuery('post');
+//             $startDate = new \DateTime($this->params()->fromQuery('startdate'));
+//             $endDate = new \DateTime($this->params()->fromQuery('enddate'));
+//         }
             $resultset = [];
             $post = $em->getRepository('Application\Entity\Post')->findOneBy(array(
                 'id' => $postId
             ));
-            
-            $result = $em->getRepository('Application\Entity\PostDimension')->findBy(array(
-                'post' => $post
-            ), array(
-                'last_updated' => 'ASC'
-            ));
-            array_push($resultset, array(
-                'post id',
-                'dimension',
-                'value',
-                'date collected'
-            ));
+            $result = $em->getRepository('Application\Entity\PostDimension')->findBy(
+                array(
+                    'post' => $post,
+                ),
+                array(
+                    'last_updated' => 'ASC',
+                )
+            );
             foreach ($result as $key => $postDimension) 
             {
                 if ($postDimension->getLastUpdated() >= $startDate && $postDimension->getLastUpdated() <= $endDate) 
                 {
-                    array_push($resultset, array(
-                        $postDimension->getPost()->getSocialMediaServiceId(),
-                        $postDimension->getDimension(),
-                        $postDimension->getValue(),
-                        $postDimension->getLastUpdated()->format('Y-m-d')
+                    array_push($resultset, array($postDimension->getPost()->getSocialMediaServiceId()=>array(
+                            $postDimension->getDimension(),
+                            $postDimension->getValue(),
+                            $postDimension->getLastUpdated()->format('Y-m-d')
+                        )
                     ));
                 }
             }
+            return new JsonModel($resultset);           
             
-//             $testerz = new JsonModel($resultset);
-//             return($testerz);
-
-            // $contacts = array( 'foo' => 'bar' );
-//             $response = $this->getResponse();
-//             $response->getHeaders()->addHeaderLine( 'Content-Type', 'application/json' );
-//             $response->setContent(json_encode($resultset));
-//             return $response;
-                       
             $filename = 'test_report.json';
             $view = new JsonModel();
-            $view->setTemplate('download/download-json')
+            $view->setTemplate('application/json')
                 ->setVariable('results', $resultset)
                 ->setTerminal(true);
             $output = $this->getServiceLocator()
@@ -338,9 +328,7 @@ class ReportController extends BaseController
                 ->addHeaderLine('Content-Length', strlen($output));
             $response->setContent($output);
             return $response;
-//         }
-//         // $resultset = array(array("item 1"=>"value 1", "item 2"=>"value 2"), array("item 3"=>"value 3", "item 4"=>"value 4"));
-//         $testerz = new JsonModel($resultset);        
-//         return($testerz);
+        }
+        return new JsonModel(array('error'=>'This endpoint responds to POST requests only'));
     }
 }

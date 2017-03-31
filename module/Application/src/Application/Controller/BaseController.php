@@ -2,8 +2,10 @@
 namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Mvc\Controller\AbstractRestfulController;
 
-class BaseController extends AbstractActionController
+// class BaseController extends AbstractActionController
+class BaseController extends AbstractRestfulController
 {
     /**
      * @var Doctrine\ORM\EntityManager

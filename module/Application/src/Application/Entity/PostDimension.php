@@ -15,7 +15,7 @@ class PostDimension {
     
     /** 
      * @ORM\ManyToOne(targetEntity="Post", inversedBy="insights")
-     * @ORM\JoinColumn(name="social_media_presence_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="post_id", referencedColumnName="id")
      */
     protected $post;
     
