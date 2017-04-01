@@ -29,8 +29,8 @@
                         <td><?php echo $post->getTitle(); ?></td>
                         <td><?php echo $post->getPage()->getTitle(); ?></td>
                         <td><?php echo $post->getSocialMediaServiceId(); ?></td>
-                        <td><?php echo $post->getCreated()->getTimestamp(); ?></td>
-                        <td><?php echo $post->getLastUpdated()->getTimestamp(); ?></td>
+                        <td><?php echo $post->getCreated()->format('Y-m-d'); ?></td>
+                        <td><?php echo $post->getLastUpdated()->format('Y-m-d'); ?></td>
                     </tr>
                     </tbody>
                 <?php endforeach; ?>

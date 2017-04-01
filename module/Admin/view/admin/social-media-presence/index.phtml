@@ -45,8 +45,8 @@
                         }
                         ?></list></td>
                         <td><?php echo $presence->getSocialMediaGateway()->getName(); ?></td>
-                        <td><?php echo $presence->getCreated()->getTimestamp(); ?></td>
-                        <td><?php echo $presence->getLastUpdated()->getTimestamp(); ?></td><td>
+                        <td><?php echo $presence->getCreated()->format('Y-m-d'); ?></td>
+                        <td><?php echo $presence->getLastUpdated()->format('Y-m-d'); ?></td><td>
                             <a href="<?php echo ($this->url('admin/default', array('controller' => 'socialmediapresence', 'action'=>'edit')) . '/' . $presence->getId() );?>">Edit</a> |
                             <a href="<?php echo ($this->url('admin/default', array('controller' => 'socialmediapresence', 'action'=>'delete')) . '/' . $presence->getId() );?>">Delete</a>
                         </td>

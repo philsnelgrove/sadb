@@ -252,12 +252,6 @@ class FetchController extends BaseController
                 'default_graph_version' => 'v2.8',
                 'default_access_token' => $access_token,
             ]);
-        
-            echo("Facebook query parameters are " . $fb_query . "</br>");
-            echo("Facebook Page ID is " . $service_id . "</br>");
-            echo("Facebook app_id is " . $app_id . "</br>");
-            echo("Facebook app_secret is " . $app_secret . "</br>");
-            echo("Facebook access_token is " . $access_token . "</br>");
             
             try {
                 $response = $fb->get($service_id . '/insights/' . $fb_query);
@@ -272,35 +266,53 @@ class FetchController extends BaseController
             }
         
             $dimensions = $response->getDecodedBody();
+            
+            // die(var_dump($dimensions));
             foreach($dimensions['data'] as $dimension)
             {
+                // die(var_dump($dimension));
                 if( isset($dimension['name']))
                 {
-                    $checkForExistingPostDimension = $em->getRepository('Application\Entity\PostDimension')->findBy(array('post'=>$post, 'dimension' => $dimension['name']), array('last_updated' => 'DESC')); //, 'last_updated' => 'today'));
+                    $checkForExistingPostDimension = $em->getRepository('Application\Entity\PostDimension')->findBy(array('post'=>$post, 'dimension' => $dimension['name']), array('last_updated' => 'DESC'));
+//                     die(var_dump($checkForExistingPostDimension));
                     $today = new \DateTime('today');
-                    $record = $checkForExistingPostDimension[0]->getLastUpdated();
-                    $date1 = new \DateTime(date('Y-m-d', strtotime($today->format('Y-m-d'))));
-                    $date2 = new \DateTime(date('Y-m-d', strtotime($record->format('Y-m-d'))));
-                    $diff = $date1->diff($date2)->days;
-                    if($diff > 0)
+                    if(!$checkForExistingPostDimension)
                     {
                         $myPostDimension = new PostDimension();
                         $myPostDimension->setPost($post);
                         $myPostDimension->setDimension($dimension['name']);
                         $myPostDimension->setValue($dimension['values'][0]['value']);
                         $em->persist($myPostDimension);
+                        // die(var_dump($myPostDimension));
                     }
-                    else
+                    else 
                     {
-                        $checkForExistingPostDimension->setValue($dimension['values'][0]['value']);
-                        $em->persist($checkForExistingPostDimension);
+                        // die(var_dump($checkForExistingPostDimension));
+                        $record = $checkForExistingPostDimension[0]->getLastUpdated();
+                        $date1 = new \DateTime(date('Y-m-d', strtotime($today->format('Y-m-d'))));
+                        $date2 = new \DateTime(date('Y-m-d', strtotime($record->format('Y-m-d'))));
+                        $diff = $date1->diff($date2)->days;
+                        if($diff > 0)
+                        {
+                            $myPostDimension = new PostDimension();
+                            $myPostDimension->setPost($post);
+                            $myPostDimension->setDimension($dimension['name']);
+                            $myPostDimension->setValue($dimension['values'][0]['value']);
+                            $em->persist($myPostDimension);
+                        }
+                        else
+                        {
+                            $checkForExistingPostDimension[0]->setValue($dimension['values'][0]['value']);
+                            $em->persist($checkForExistingPostDimension[0]);
+                        }
+                        // die(var_dump($checkForExistingPostDimension[0]));
                     }
                  }
             }
             $em->flush();
             return $this->redirect()->toRoute($route);
         }
-        $em = $this->getEntityManager();
+        // $em = $this->getEntityManager();
         $formManager = $this->serviceLocator->get('FormElementManager');
         $form = $formManager->get('PostFetchForm');
         $form->add(array(

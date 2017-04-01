@@ -1,0 +1,14 @@
+<strong>Module:</strong>        Admin &raquo;
+<strong>Controller:</strong>    Page &raquo;
+<strong>Action:</strong>        Delete
+</br>
+<?php
+
+$title = 'Delete Page';
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+Are you sure you want to delete Page <?php echo $page->getTitle(); ?>? <br/>
+<form method="post">
+  <input type="submit" value="Delete">
+</form>

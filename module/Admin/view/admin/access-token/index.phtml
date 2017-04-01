@@ -27,8 +27,8 @@
                         <td><?php echo $token->getId(); ?></td>
                         <td><?php echo $token->getToken(); ?></td>
                         <td><?php if($token->getSocialMediaGateway()) echo $token->getSocialMediaGateway()->getName(); else echo '----';?></td>
-                        <td><?php echo $token->getCreated()->getTimestamp(); ?></td>
-                        <td><?php echo $token->getLastUpdated()->getTimestamp(); ?></td>
+                        <td><?php echo $token->getCreated()->format('Y-m-d'); ?></td>
+                        <td><?php echo $token->getLastUpdated()->format('Y-m-d'); ?></td>
                     </tr>
                     </tbody>
                 <?php endforeach; ?>

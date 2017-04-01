@@ -27,8 +27,8 @@
                     <tr>
                         <td><?php echo $dimension->getId(); ?></td>
                         <td><?php echo $dimension->getName(); ?></td>
-                        <td><?php echo $dimension->getCreated()->getTimestamp(); ?></td>
-                        <td><?php echo $dimension->getLastUpdated()->getTimestamp(); ?></td><td>
+                        <td><?php echo $dimension->getCreated()->format('Y-m-d'); ?></td>
+                        <td><?php echo $dimension->getLastUpdated()->format('Y-m-d'); ?></td><td>
                             <a href="<?php echo ($this->url('admin/default', array('controller' => 'dimension', 'action'=>'edit')) . '/' . $dimension->getId() );?>">Edit</a> |
                             <a href="<?php echo ($this->url('admin/default', array('controller' => 'dimension', 'action'=>'delete')) . '/' . $dimension->getId() );?>">Delete</a>
                         </td>

@@ -80,6 +80,16 @@ return array(
                     ),
                 ),
             ),
+            'postdimensionlist' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/admin/postdimension/index',
+                    'defaults' => array(
+                        'controller' => 'Admin\Controller\PostDimension',
+                        'action'     => 'index',
+                    ),
+                ),
+            ),
             'admin' => array(
                 'type'    => 'Literal',
                 'options' => array(

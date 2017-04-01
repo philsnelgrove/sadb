@@ -241,6 +241,11 @@ class ReportController extends BaseController
                     ));
                     $filenameadder = $postDimension->getPost()->getSocialMediaServiceId() . '_';
                 }
+                else 
+                {
+                    echo "no results";
+                    return;
+                }
             }
         }
         $filename .= $filenameadder;
@@ -273,11 +278,14 @@ class ReportController extends BaseController
         $em = $this->getEntityManager();
         if ($this->request->isPost()) 
         {
-//         if ($this->request->isPost())
-//         {
             $postId = $this->params()->fromPost('post');
             $startDate = new \DateTime($this->params()->fromPost('startdate'));
             $endDate = new \DateTime($this->params()->fromPost('enddate'));
+            // the code below is for testing; when uncommented, 
+            // it allows the endpoint to respond to a "get"
+            // like /application/report/json?post[]=1012034048927553_1012041805593444&post[]=1012034048927553_1015785951885696&startdate=2016-1-1&enddate=2017-12-30
+            // .. for example
+            
 //         }
 //         else 
 //         {
@@ -285,49 +293,37 @@ class ReportController extends BaseController
 //             $startDate = new \DateTime($this->params()->fromQuery('startdate'));
 //             $endDate = new \DateTime($this->params()->fromQuery('enddate'));
 //         }
-            $resultset = [];
-            $post = $em->getRepository('Application\Entity\Post')->findOneBy(array(
-                'id' => $postId
-            ));
-            $result = $em->getRepository('Application\Entity\PostDimension')->findBy(
-                array(
-                    'post' => $post,
-                ),
-                array(
-                    'last_updated' => 'ASC',
-                )
-            );
-            foreach ($result as $key => $postDimension) 
+            $responseset = [];
+            foreach($postId as $post_id)
             {
-                if ($postDimension->getLastUpdated() >= $startDate && $postDimension->getLastUpdated() <= $endDate) 
+                $resultset = [];
+                $post = $em->getRepository('Application\Entity\Post')->findOneBy(array(
+                    'social_media_service_id' => $post_id
+                ));
+                $result = $em->getRepository('Application\Entity\PostDimension')->findBy(
+                    array(
+                        'post' => $post,
+                    ),
+                    array(
+                        'last_updated' => 'ASC',
+                    )
+                );
+                foreach ($result as $key => $postDimension) 
                 {
-                    array_push($resultset, array($postDimension->getPost()->getSocialMediaServiceId()=>array(
-                            $postDimension->getDimension(),
-                            $postDimension->getValue(),
-                            $postDimension->getLastUpdated()->format('Y-m-d')
-                        )
-                    ));
+                    if ($postDimension->getLastUpdated() >= $startDate && $postDimension->getLastUpdated() <= $endDate) 
+                    {
+                        array_push($resultset, array($post_id=>array(
+                                $postDimension->getDimension(),
+                                $postDimension->getValue(),
+                                $postDimension->getLastUpdated()->format('Y-m-d')
+                            )
+                        ));
+                    }
+                    
                 }
+                array_push($responseset, $resultset);
             }
-            return new JsonModel($resultset);           
-            
-            $filename = 'test_report.json';
-            $view = new JsonModel();
-            $view->setTemplate('application/json')
-                ->setVariable('results', $resultset)
-                ->setTerminal(true);
-            $output = $this->getServiceLocator()
-                ->get('viewrenderer')
-                ->render($view);
-            
-            $response = $this->getResponse();
-            $headers = $response->getHeaders();
-            $headers->addHeaderLine('Content-Type', 'application/json')
-                ->addHeaderLine('Content-Disposition', sprintf("attachment; filename=\"%s\"", $filename))
-                ->addHeaderLine('Accept-Ranges', 'bytes')
-                ->addHeaderLine('Content-Length', strlen($output));
-            $response->setContent($output);
-            return $response;
+            return new JsonModel($responseset);           
         }
         return new JsonModel(array('error'=>'This endpoint responds to POST requests only'));
     }

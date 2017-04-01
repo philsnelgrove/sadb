@@ -35,8 +35,8 @@
                         <td><?php echo $user->getState(); ?></td>
                         <td><?php echo $user->getUsername(); ?></td>
                         <td><?php echo $user->getEnterprise()->getName(); ?></td>
-                        <td><?php echo $user->getCreated()->getTimestamp(); ?></td>
-                        <td><?php echo $user->getLastUpdated()->getTimestamp(); ?></td><td>
+                        <td><?php echo $user->getCreated()->format('Y-m-d'); ?></td>
+                        <td><?php echo $user->getLastUpdated()->format('Y-m-d'); ?></td><td>
                             <a href="<?php echo ($this->url('admin/default', array('controller' => 'user', 'action'=>'edit')) . '/' . $user->getId() );?>">Edit</a> |
                             <a href="<?php echo ($this->url('admin/default', array('controller' => 'user', 'action'=>'delete')) . '/' . $user->getId() );?>">Delete</a>
                         </td>

@@ -1,14 +1,42 @@
 <strong>Module:</strong>        Admin &raquo;
-<strong>Controller:</strong>    Index &raquo;
-<strong>Action:</strong>        index
+<strong>Controller:</strong>    PostDimension &raquo;
+<strong>Action:</strong>        Index
 </br>
-<h3>Administrative options:</h3>
-<body>
-<?php // set of url_helpers that resolve to administrative views ?>
-<?php echo('List of administrative options goes here');?></br>
-<a href='/admin/index/edit_model'>- edit model data</a></br>
-<a href='/admin/index/social_media'>- social media auth data</a></br>
-<a href='/admin/index/user_permission'>- administarate user permissions</a></br>
-<a href='/admin/index/user_edit'>- edit user data</a></br>
-<a href='/admin/index/generate_report'>- generate report</a></br>
-</body>
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Post Dimensions</h3>
+            </div>
+            <div class="panel-body">
+                <?php if (isset($postdimensions)) : ?>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Dimension</th>
+                        <th>Value</th>
+                        <th>Post</th>
+                        <th>Date Created</th>
+                        <th>Date last Updated</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                <?php foreach($postdimensions as $postdimension): ?>
+                    <tbody>
+                    <tr>
+                        <td><?php echo $postdimension->getId(); ?></td>
+                        <td><?php echo $postdimension->getDimension(); ?></td>
+                        <td><?php echo $postdimension->getValue(); ?></td>
+                        <td><?php echo $postdimension->getPost()->getTitle(); ?></td>
+                        <td><?php echo $postdimension->getCreated()->format('Y-m-d'); ?></td>
+                        <td><?php echo $postdimension->getLastUpdated()->format('Y-m-d'); ?></td>
+                    </tr>
+                    </tbody>
+                <?php endforeach; ?>
+                </table>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+</div>

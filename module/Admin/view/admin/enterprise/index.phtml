@@ -41,8 +41,8 @@
                             echo($presence->getName() . '</br>');
                         }
                         ?></list></td>
-                        <td><?php echo $enterprise->getCreated()->getTimestamp(); ?></td>
-                        <td><?php echo $enterprise->getLastUpdated()->getTimestamp(); ?></td><td>
+                        <td><?php echo $enterprise->getCreated()->format('Y-m-d'); ?></td>
+                        <td><?php echo $enterprise->getLastUpdated()->format('Y-m-d'); ?></td><td>
                             <a href="<?php echo ($this->url('admin/default', array('controller' => 'enterprise', 'action'=>'edit')) . '/' . $enterprise->getId() );?>">Edit</a> |
                             <a href="<?php echo ($this->url('admin/default', array('controller' => 'enterprise', 'action'=>'delete')) . '/' . $enterprise->getId() );?>">Delete</a>
                         </td>
