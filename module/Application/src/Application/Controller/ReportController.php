@@ -281,10 +281,11 @@ class ReportController extends BaseController
             $postId = $this->params()->fromPost('post');
             $startDate = new \DateTime($this->params()->fromPost('startdate'));
             $endDate = new \DateTime($this->params()->fromPost('enddate'));
+            
             // the code below is for testing; when uncommented, 
-            // it allows the endpoint to respond to a "get"
-            // like /application/report/json?post[]=1012034048927553_1012041805593444&post[]=1012034048927553_1015785951885696&startdate=2016-1-1&enddate=2017-12-30
-            // .. for example
+            // it allows the endpoint to respond to a "get" like...
+            // /application/report/json?post[]=1012034048927553_1012041805593444&post[]=1012034048927553_1015785951885696&startdate=2016-1-1&enddate=2017-12-30
+            // ... for example; handy for testing in a browser
             
 //         }
 //         else 

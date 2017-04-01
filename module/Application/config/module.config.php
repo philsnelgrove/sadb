@@ -149,27 +149,62 @@ return array(
                 'label' => 'Home',
                 'route' => 'home',
             ),
-            array(
-                'label' => 'Album',
-                'route' => 'album',
+            'pages' => array(
+                'label' => 'Administration',
+                'route' => 'admin/default',
                 'pages' => array(
                     array(
-                        'label' => 'Add',
-                        'route' => 'album',
-                        'action' => 'add',
+                        'label' => 'Index',
+                        'controller' => 'index',
+                        'action' => 'index',
                     ),
                     array(
-                        'label' => 'Edit',
-                        'route' => 'album',
-                        'action' => 'edit',
+                        'label' => 'Edit Models',
+                        'controller' => 'edit_model',
+                        'action' => 'index'
+
                     ),
-                    array(
-                        'label' => 'Delete',
-                        'route' => 'album',
-                        'action' => 'delete',
-                    ),
+//                     array(
+//                         'label' => 'Add',
+//                         'route' => 'album',
+//                         'action' => 'add',
+//                     ),
+//                     array(
+//                         'label' => 'Edit',
+//                         'route' => 'album',
+//                         'action' => 'edit',
+//                     ),
+//                     array(
+//                         'label' => 'Delete',
+//                         'route' => 'album',
+//                         'action' => 'delete',
+//                     ),
                 ),
             ),
         ),
     ),
 );
+/*
+ * 'navigation' => array(
+         'default' => array(
+             array(
+                 'label' => 'Home',
+                 'route' => 'home',
+             ),
+             array(
+                 'label' => 'Page #1',
+                 'route' => 'page-1',
+                 'pages' => array(
+                     array(
+                         'label' => 'Child #1',
+                         'route' => 'page-1-child',
+                     ),
+                 ),
+             ),
+             array(
+                 'label' => 'Page #2',
+                 'route' => 'page-2',
+             ),
+         ),
+     ),
+     */
