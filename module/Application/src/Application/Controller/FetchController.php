@@ -50,11 +50,6 @@ class FetchController extends BaseController
             'default_access_token' => $access_token,
         ]);
         
-//         echo("Facebook query parameters are " . $fb_query . "</br>");
-//         echo("Facebook app_id is " . $app_id . "</br>");
-//         echo("Facebook app_secret is " . $app_secret . "</br>");
-//         echo("Facebook access_token is " . $access_token . "</br>");
-        
         try {
             $response = $fb->get('/me/accounts');
         } catch(\Facebook\Exceptions\FacebookResponseException $e) 
@@ -70,11 +65,15 @@ class FetchController extends BaseController
         $pages = $response->getDecodedBody();
         foreach($pages['data'] as $page)
         {
-            $myPage = new Page();
-            $myPage->setTitle($page['name']);
-            $myPage->setSocialMediaServiceId($page['id']);
-            $myPage->setSocialMediaPresence($myPresence);
-            $em->persist($myPage);
+            $pageExists = $em->getRepository('Application\Entity\Page')->findOneBy(array('title'=>$page['name']));
+            if(!$pageExists)
+            {
+                $myPage = new Page();
+                $myPage->setTitle($page['name']);
+                $myPage->setSocialMediaServiceId($page['id']);
+                $myPage->setSocialMediaPresence($myPresence);
+                $em->persist($myPage);
+            }
         }
         $em->flush();
         return;
@@ -121,11 +120,11 @@ class FetchController extends BaseController
                 'default_access_token' => $access_token,
             ]);
         
-            echo("Facebook query parameters are " . $fb_query . "</br>");
-            echo("Facebook Page ID is " . $service_id . "</br>");
-            echo("Facebook app_id is " . $app_id . "</br>");
-            echo("Facebook app_secret is " . $app_secret . "</br>");
-            echo("Facebook access_token is " . $access_token . "</br>");
+//             echo("Facebook query parameters are " . $fb_query . "</br>");
+//             echo("Facebook Page ID is " . $service_id . "</br>");
+//             echo("Facebook app_id is " . $app_id . "</br>");
+//             echo("Facebook app_secret is " . $app_secret . "</br>");
+//             echo("Facebook access_token is " . $access_token . "</br>");
             
             try {
                 $response = $fb->get($service_id . '/insights/' . $fb_query);
@@ -156,7 +155,18 @@ class FetchController extends BaseController
                         $myPageDimension = new PageDimension();
                         $myPageDimension->setPage($page);
                         $myPageDimension->setDimension($dimension['name']);
-                        $myPageDimension->setValue($dimension['values'][0]['value']);
+                        // grab string or array, make it an array
+                        if(gettype($dimension['values'][0]['value'])!='array')
+                        {
+                            $myPageDimension->addValue(['default'=>$dimension['values'][0]['value']]);
+                        }
+                        else 
+                        {
+                            foreach($dimension['values'][0]['value'] as $key=>$value)
+                            {
+                                $myPageDimension->addValue([$key=>$value]);
+                            }
+                        }
                         $em->persist($myPostDimension);
                     }
                     else
@@ -281,7 +291,18 @@ class FetchController extends BaseController
                         $myPostDimension = new PostDimension();
                         $myPostDimension->setPost($post);
                         $myPostDimension->setDimension($dimension['name']);
-                        $myPostDimension->setValue($dimension['values'][0]['value']);
+                        // grab string or array, make it an array
+                        if(gettype($dimension['values'][0]['value'])!='array')
+                        {
+                            $myPostDimension->addValue(['default'=>$dimension['values'][0]['value']]);
+                        }
+                        else
+                        {
+                            foreach($dimension['values'][0]['value'] as $key=>$value)
+                            {
+                                $myPostDimension->addValue([$key=>$value]);
+                            }
+                        }
                         $em->persist($myPostDimension);
                         // die(var_dump($myPostDimension));
                     }
@@ -397,34 +418,6 @@ class FetchController extends BaseController
                     }
                 }
             }
-//             $fb = new Facebook([
-//                 'app_id' => $app_id,
-//                 'app_secret' => $app_secret,
-//                 'default_graph_version' => 'v2.8',
-//                 'default_access_token' => $access_token,
-//             ]);
-            
-//             echo("Facebook query parameters are " . $fb_query . "</br>");
-//             echo("Facebook app_id is " . $app_id . "</br>");
-//             echo("Facebook app_secret is " . $app_secret . "</br>");
-//             echo("Facebook access_token is " . $access_token . "</br>");
-            
-//             try {
-//                 // Get the \Facebook\GraphNodes\GraphUser object for the current user.
-//                 // If you provided a 'default_access_token', the '{access-token}' is optional.
-//                 $response = $fb->get('/me');
-//             } catch(\Facebook\Exceptions\FacebookResponseException $e) {
-//                 // When Graph returns an error
-//                 echo 'Graph returned an error: ' . $e->getMessage();
-//                 exit;
-//             } catch(\Facebook\Exceptions\FacebookSDKException $e) {
-//                 // When validation fails or other local issues
-//                 echo 'Facebook SDK returned an error: ' . $e->getMessage();
-//                 exit;
-//             }
-            
-//             $me = $response->getGraphUser();
-//             echo 'Logged in as ' . $me->getName();
         };
     }
     
@@ -555,11 +548,11 @@ class FetchController extends BaseController
                 'default_access_token' => $access_token,
             ]);
     
-            echo("Facebook query parameters are " . $fb_query . "</br>");
-            echo("Facebook Page ID is " . $page_id . "</br>");
-            echo("Facebook app_id is " . $app_id . "</br>");
-            echo("Facebook app_secret is " . $app_secret . "</br>");
-            echo("Facebook access_token is " . $access_token . "</br>");
+//             echo("Facebook query parameters are " . $fb_query . "</br>");
+//             echo("Facebook Page ID is " . $page_id . "</br>");
+//             echo("Facebook app_id is " . $app_id . "</br>");
+//             echo("Facebook app_secret is " . $app_secret . "</br>");
+//             echo("Facebook access_token is " . $access_token . "</br>");
     
             try {
                 $response = $fb->get($page_id . '/feed/');

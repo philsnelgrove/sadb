@@ -1,0 +1,7 @@
+<div style="float:left; padding-right:16px;"><?php echo $this->gravatar($this->zfcUserIdentity()->getEmail()) ?></div>
+<h3><?php echo $this->translate('Hello'); ?>, <?php echo $this->zfcUserDisplayName() ?>!</h3></br></br>
+<a href="<?php echo $this->url('admin/default', array('controller'=>'user','action'=>'edit', 'id'=>$this->zfcUserIdentity()->getId())) ?>">[<?php echo $this->translate('View/Edit Profile'); ?>]</a></br>
+<a href="<?php echo $this->url('zfcuser/changeemail') ?>">[<?php echo $this->translate('Change Email'); ?>]</a></br>
+<a href="<?php echo $this->url('zfcuser/changepassword') ?>">[<?php echo $this->translate('Change Password'); ?>]</a></br>
+<a href="<?php echo $this->url('zfcuser/logout') ?>">[<?php echo $this->translate('Sign Out'); ?>]</a>
+<div style="clear:both;"></div>

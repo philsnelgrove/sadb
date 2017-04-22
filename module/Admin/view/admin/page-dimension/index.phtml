@@ -1,0 +1,53 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Page Dimensions</h3>
+            </div>
+            <div class="panel-body">
+                <?php if (isset($pagedimensions)) : ?>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Dimension</th>
+                        <th>Value</th>
+                        <th>Post</th>
+                        <th>Date Created</th>
+                        <th>Date last Updated</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                <?php foreach($pagedimensions as $pagedimension): ?>
+                    <tbody>
+                    <tr>
+                        <td><?php echo $pagedimension->getId(); ?></td>
+                        <td><?php echo $pagedimension->getDimension(); ?></td>
+                        <td><?php
+                        foreach($pagedimension->getValues() as $item)
+                        {
+                            foreach($item as $key=>$value)
+                            {
+                                if($key == 'default')
+                                {
+                                    echo($value);
+                                }
+                                else
+                                {
+                                    echo('[\'' . $key . '\':\'' . $value . '\']</br>');
+                                }
+                            }
+                        }
+                        ?></td>
+                        <td><?php echo $pagedimension->getPost()->getTitle(); ?></td>
+                        <td><?php echo $pagedimension->getCreated()->format('Y-m-d'); ?></td>
+                        <td><?php echo $pagedimension->getLastUpdated()->format('Y-m-d'); ?></td>
+                    </tr>
+                    </tbody>
+                <?php endforeach; ?>
+                </table>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+</div>

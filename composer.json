@@ -1,29 +1,31 @@
 {
-  "name" : "zendframework/sadb",
-  "description" : "Social Analytics Database for the CBC",
-  "version" : "0.1",
-  "require" : {
-    "php" : "<5.4.99",
-    "zendframework/zendframework" : "~2.4.11",
-    "ircmaxell/random-lib" : "<=v1.2.0",
-    "ocramius/proxy-manager" : "<=1.0.2",
-    "zendframework/zendservice-recaptcha" : "<=2.0.0",
-    "doctrine/orm" : "<=v2.4.8",
-    "zendframework/zend-developer-tools" : "<=1.0.0",
-    "doctrine/migrations" : "<=v1.2.2",
-    "ocramius/ocra-service-manager" : "<=2.1.0",
-    "san/san-session-toolbar" : "<=0.6.6",
-    "snapshotpl/zf-snap-event-debugger" : "dev-master",
-    "doctrine/doctrine-orm-module" : "<=0.8.0",
-    "bjyoungblood/bjy-profiler" : "<=v1.0.0",
-    "zf-commons/zfc-admin" : "<=v0.2.1",
-    "bjyoungblood/bjy-authorize" : "<=1.1.1",
-    "zendframework/zend-permissions-acl" : "<=2.1.1",
-    "zf-commons/zfc-user-doctrine-orm" : "<=0.1.3",
-    "facebook/graph-sdk" : "~5.4.4",
-    "radnan/rdn-csv" : "v1.1.0"
-  },
-  "license" : "BSD-3-Clause",
-  "keywords" : [ "framework", "zf2" ],
-  "homepage" : "http://framework.zend.com/"
+	"name" : "zendframework/sadb",
+	"description" : "Social Analytics Database for the CBC",
+	"version" : "0.1",
+	"require" : {
+		"php" : "<5.4.99",
+		"zendframework/zendframework" : "~2.4.11",
+		"ircmaxell/random-lib" : "<=v1.2.0",
+		"ocramius/proxy-manager" : "<=1.0.2",
+		"zendframework/zendservice-recaptcha" : "<=2.0.0",
+		"doctrine/orm" : "<=v2.4.8",
+		"zendframework/zend-developer-tools" : "<=1.0.0",
+		"doctrine/migrations" : "<=v1.2.2",
+		"san/san-session-toolbar" : "<=0.6.6",
+		"snapshotpl/zf-snap-event-debugger" : "dev-master",
+		"doctrine/doctrine-orm-module" : "<=0.8.0",
+		"bjyoungblood/bjy-profiler" : "<=v1.0.0",
+		"zf-commons/zfc-admin" : "<=v0.2.1",
+		"bjyoungblood/bjy-authorize" : "<=1.1.1",
+		"zendframework/zend-permissions-acl" : "<=2.1.1",
+		"zf-commons/zfc-user-doctrine-orm" : "<=0.1.3",
+		"facebook/graph-sdk" : "~5.4.4",
+		"radnan/rdn-csv" : "v1.1.0"
+	},
+	"license" : "BSD-3-Clause",
+	"keywords" : [
+		"framework",
+		"zf2"
+	],
+	"homepage" : "http://framework.zend.com/"
 }

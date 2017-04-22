@@ -132,10 +132,10 @@ class SetupController extends BaseController
         $user_array = array(
             1=>array(
                 'enterprise_id'=>1,
-                'username'=>"phil",
+                'username'=>"admin",
                 'state'=>1,
-                'email'=>"mikdrad@yahoo.com",
-                'display_name'=>"Phil",
+                'email'=>"admin@yahoo.com",
+                'display_name'=>"Admin",
                 'password'=>"password"
             ),
         );

@@ -93,11 +93,8 @@ return array(
             'admin' => array(
                 'type'    => 'Literal',
                 'options' => array(
-                    // Change this to something specific to your module
                     'route'    => '/admin',
                     'defaults' => array(
-                        // Change this value to reflect the namespace in which
-                        // the controllers for your module are found
                         '__NAMESPACE__' => 'Admin\Controller',
                         'controller'    => 'Index',
                         'action'        => 'index',
@@ -105,14 +102,10 @@ return array(
                 ),
                 'may_terminate' => true,
                 'child_routes' => array(
-                    // This route is a sane default when developing a module;
-                    // as you solidify the routes for your module, however,
-                    // you may want to remove it and replace it with more
-                    // specific routes.
                     'default' => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route'    => '/[:controller[/:action[/:id]]]',
+                            'route'    => '[/:controller[/:action[/:id]]]',
                             'constraints' => array(
                                 'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
                                 'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
@@ -133,36 +126,7 @@ return array(
     ),
     'service_manager' => array(
         'factories' => array(
-            'navigation' => 'Zend\Navigation\Service\DefaultNavigationFactory', // <-- add this
+            'navigation' => 'Zend\Navigation\Service\DefaultNavigationFactory',
         ),
      ),
-//     'navigation' => array(
-//         'default' => array(
-//             array(
-//                 'label' => 'Home',
-//                 'route' => 'home',
-//             ),
-//             array(
-//                 'label' => 'Album',
-//                 'route' => 'album',
-//                 'pages' => array(
-//                     array(
-//                         'label' => 'Add',
-//                         'route' => 'album',
-//                         'action' => 'add',
-//                     ),
-//                     array(
-//                         'label' => 'Edit',
-//                         'route' => 'album',
-//                         'action' => 'edit',
-//                     ),
-//                     array(
-//                         'label' => 'Delete',
-//                         'route' => 'album',
-//                         'action' => 'delete',
-//                     ),
-//                 ),
-//             ),
-//         ),
-//     ),
 );

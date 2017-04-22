@@ -48,14 +48,25 @@
                 </div><!--/.nav-collapse -->
             </div>
         </nav>
-        <div class="container">
-        	<?php echo $this->navigation('navigation')->breadcrumbs()->setMinDepth(0); ?>
-            <?php echo $this->content; ?>
-            <hr>
-            <footer>
-                <p>&copy; 2005 - <?php echo date('Y') ?> by Philip Snelgrove <?php echo $this->translate('All rights reserved.') ?></p>
-            </footer>
-        </div> <!-- /container -->
+        <!-- Test if the User is connected, but not for login or register -->
+        <?php $routeName = $this->getHelperPluginManager()->getServiceLocator()->get('Application')
+               ->getMvcEvent()->getRouteMatch()->getMatchedRouteName(); //die($routeName);?>
+        <?php $thisIsLogin = ($routeName === 'zfcuser/login');?>
+        <?php $thisIsRegister = ($routeName === 'zfcuser/register'); ?>
+        <?php if(!$this->zfcUserIdentity() && !$thisIsRegister && !$thisIsLogin ): ?>
+            <!-- display the login form -->
+            <?php echo $this->zfcUserLoginWidget(array('redirect'=>'application')); ?>
+        <?php else: ?>
+            <div class="container">
+            	<?php echo $this->navigation('navigation')->breadcrumbs()->setMinDepth(0); ?>
+                <?php echo $this->content; ?>
+                <hr>
+                <footer>
+                    <p>&copy; 2005 - <?php echo date('Y') ?> CBC <?php echo $this->translate('All rights reserved.') ?></p>
+                </footer>
+            </div>
+        <?php endif?> 
+        <!-- /container -->
         <?php echo $this->inlineScript() ?>
     </body>
 </html>

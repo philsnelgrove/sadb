@@ -23,7 +23,22 @@
                     <tr>
                         <td><?php echo $postdimension->getId(); ?></td>
                         <td><?php echo $postdimension->getDimension(); ?></td>
-                        <td><?php echo $postdimension->getValue(); ?></td>
+                        <td><?php
+                        foreach($postdimension->getValues() as $item)
+                        {
+                            foreach($item as $key=>$value)
+                            {
+                                if($key == 'default')
+                                {
+                                    echo($value);
+                                }
+                                else
+                                {
+                                    echo('[\'' . $key . '\':\'' . $value . '\']</br>');
+                                }
+                            }
+                        }
+                        ?></td>
                         <td><?php echo $postdimension->getPost()->getTitle(); ?></td>
                         <td><?php echo $postdimension->getCreated()->format('Y-m-d'); ?></td>
                         <td><?php echo $postdimension->getLastUpdated()->format('Y-m-d'); ?></td>

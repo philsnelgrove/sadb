@@ -190,8 +190,10 @@ class ReportController extends BaseController
             session_start();
         }
         $em = $this->getEntityManager();
+        $filenameadder = '';
+        $filename = '';
         if ($this->request->isPost()) {
-            $filename = '';
+//            die(var_dump($this->getRequest()->getPost()));
             $postId = $this->getRequest()->getPost('post');
             if (! $postId) {
                 $pageId = $this->getRequest()->getPost('page');
@@ -225,28 +227,62 @@ class ReportController extends BaseController
                     'last_updated' => 'ASC'
                 ));
             }
+//            die(var_dump($result));
+//            die(var_dump($this->getRequest()->getPost('dimensionTable')));
             array_push($resultset, array(
                 $csvHeader,
                 'dimension',
                 'value',
                 'date collected'
             ));
+            $selectedDimensionIds = $this->getRequest()->getPost('dimensionTable');
+            $selectedDimensions = [];
+            foreach ($selectedDimensionIds as $id)
+            {
+                $selectedDimensions[] = $em->getRepository('Application\Entity\Dimension')->find($id)->getName();
+            }
+//            die(var_dump($selectedDimensions));
             foreach ($result as $key => $postDimension) {
-                if ($postDimension->getLastUpdated() >= $startDate && $postDimension->getLastUpdated() <= $endDate) {
-                    array_push($resultset, array(
-                        $postDimension->getPost()->getSocialMediaServiceId(),
-                        $postDimension->getDimension(),
-                        $postDimension->getValue(),
-                        $postDimension->getLastUpdated()->format('Y-m-d')
-                    ));
+                $dimensionName = $postDimension->getDimension();
+                $workingValues = $postDimension->getValues();
+//                die(print_r($workingValues,true).'</br>');
+//                echo(var_dump($postDimension).print_r($selectedDimensions, true));
+                if ($postDimension->getLastUpdated() >= $startDate && $postDimension->getLastUpdated() <= $endDate && in_array($dimensionName, $selectedDimensions)) 
+                {
+                    if(array_key_exists('default', $workingValues[0]))
+                    {
+//                         echo($dimensionName . ':' . print_r($workingValues[0]['default'], true) . '</br>');
+                        // if the first key is "default" then just add the value
+                        array_push($resultset, array(
+                            $postDimension->getPost()->getSocialMediaServiceId(),
+                            $dimensionName,
+                            $workingValues[0]['default'],
+                            $postDimension->getLastUpdated()->format('Y-m-d')
+                        ));
+                    }
+                    else 
+                    {
+                        foreach ($workingValues as $k => $v)
+                        {
+//                             echo($dimensionName . '_' . key($v) . ':' . current($v) . '</br>');
+                            array_push($resultset, array(
+                                $postDimension->getPost()->getSocialMediaServiceId(),
+                                $dimensionName . '_' . key($v),
+                                current($v),
+                                $postDimension->getLastUpdated()->format('Y-m-d')
+                            ));
+                        }
+                    }
                     $filenameadder = $postDimension->getPost()->getSocialMediaServiceId() . '_';
                 }
                 else 
                 {
-                    echo "no results";
-                    return;
+                    //echo "no results";
+                    //return;
                 }
             }
+            // test return, REMOVE OR COMMENT
+            // return;
         }
         $filename .= $filenameadder;
         $filename .= $endDate->format('Y-m-d');
@@ -290,7 +326,11 @@ class ReportController extends BaseController
 //         }
 //         else 
 //         {
-//             $postId = $this->params()->fromQuery('post');
+//             $ array_push($resultset, array(
+//                             $postDimension->getPost()->getSocialMediaServiceId(),
+//                             $postDimension->getDimension(),
+//                             $postDimension->getValues(),
+//                             $postId = $this->params()->fromQuery('post');
 //             $startDate = new \DateTime($this->params()->fromQuery('startdate'));
 //             $endDate = new \DateTime($this->params()->fromQuery('enddate'));
 //         }

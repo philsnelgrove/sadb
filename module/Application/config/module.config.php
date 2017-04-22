@@ -13,9 +13,21 @@ return array(
             'home' => array(
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'options' => array(
-                    'route'    => '/',
+                    'route'    => '/application',
                     'defaults' => array(
-                        'controller' => 'Application\Controller\Index',
+                        '__NAMESPACE__' => 'Application\Controller',
+                        'controller' => 'Index',
+                        'action'     => 'index',
+                    ),
+                ),
+            ),
+            'user' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/user',
+                    'defaults' => array(
+                        '__NAMESPACE__' => 'ZfcUser\Controller',
+                        'controller' => 'User',
                         'action'     => 'index',
                     ),
                 ),
@@ -31,10 +43,6 @@ return array(
                     ),
                 ),
             ),
-            // The following is a route to simplify getting started creating
-            // new controllers and actions without needing to create a new
-            // module. Simply drop new controllers in, and you can access them
-            // using the path /application/:controller/:action
             'application' => array(
                 'type'    => 'Literal',
                 'options' => array(
@@ -50,7 +58,7 @@ return array(
                     'default' => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route'    => '/[:controller[/:action]]',
+                            'route'    => '[/:controller[/:action]]',
                             'constraints' => array(
                                 'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
                                 'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
@@ -109,6 +117,7 @@ return array(
         ),
         'template_path_stack' => array(
             __DIR__ . '/../view',
+            'zfc-user' => __DIR__ . '/../view',
         ),
         'strategies' => array(
             'ViewJsonStrategy',
@@ -146,65 +155,61 @@ return array(
     'navigation' => array(
         'default' => array(
             array(
-                'label' => 'Home',
-                'route' => 'home',
-            ),
-            'pages' => array(
                 'label' => 'Administration',
                 'route' => 'admin/default',
                 'pages' => array(
                     array(
                         'label' => 'Index',
-                        'controller' => 'index',
+                        'route' => 'admin/default',
+                        'controller' => 'Index',
                         'action' => 'index',
                     ),
                     array(
                         'label' => 'Edit Models',
-                        'controller' => 'edit_model',
+                        'route' => 'admin/default',
+                        'controller' => 'EditModel',
                         'action' => 'index'
-
                     ),
-//                     array(
-//                         'label' => 'Add',
-//                         'route' => 'album',
-//                         'action' => 'add',
-//                     ),
-//                     array(
-//                         'label' => 'Edit',
-//                         'route' => 'album',
-//                         'action' => 'edit',
-//                     ),
-//                     array(
-//                         'label' => 'Delete',
-//                         'route' => 'album',
-//                         'action' => 'delete',
-//                     ),
+                    array(
+                        'label' => 'Setup SADB',
+                        'route' => 'application/default',
+                        'controller' => 'Setup',
+                        'action' => 'index'
+                    ),
+                ),
+            ),
+            array(
+                'label' => 'SADB',
+                'route' => 'application/default',
+                'pages' => array(
+                    array(
+                        'label' => 'Data Fetch',
+                        'route' => 'application/default',
+                        'controller' => 'Fetch',
+                        'action' => 'index',
+                    ),
+                    array(
+                        'label' => 'Report',
+                        'route' => 'application/default',
+                        'controller' => 'Report',
+                        'action' => 'index'
+                    ),
+                ),
+            ),
+            array(
+                'label' => 'User',
+                'route' => 'user',
+                'pages' => array(
+                    array(
+                        'label' => 'Profile',
+                        'route' => 'user',
+                    ),
+                    array(
+                        'label' => 'Sign Out',
+                        'route' => 'zfcuser/logout'
+                    ),
                 ),
             ),
         ),
     ),
 );
-/*
- * 'navigation' => array(
-         'default' => array(
-             array(
-                 'label' => 'Home',
-                 'route' => 'home',
-             ),
-             array(
-                 'label' => 'Page #1',
-                 'route' => 'page-1',
-                 'pages' => array(
-                     array(
-                         'label' => 'Child #1',
-                         'route' => 'page-1-child',
-                     ),
-                 ),
-             ),
-             array(
-                 'label' => 'Page #2',
-                 'route' => 'page-2',
-             ),
-         ),
-     ),
-     */

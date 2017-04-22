@@ -22,8 +22,8 @@ class PostDimension {
     /** @ORM\Column(type="string") */
     protected $dimension;
         
-    /** @ORM\Column(type="string") */
-    protected $value;
+    /** @ORM\Column(type="array") */
+    protected $values;
     
     /** @ORM\Column(type="datetime") */
     protected $last_updated;
@@ -68,9 +68,9 @@ class PostDimension {
      * @param string $value
      * @return PostDimension
      */
-    public function setValue($value)
+    public function addValue($value)
     {
-        $this->value = $value;
+        $this->values[] = $value;
         $this->last_updated = new \DateTime();
 
         return $this;
@@ -81,9 +81,9 @@ class PostDimension {
      *
      * @return string 
      */
-    public function getValue()
+    public function getValues()
     {
-        return $this->value;
+        return $this->values;
     }
 
     /**

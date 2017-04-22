@@ -41,7 +41,7 @@ $settings = array(
      *
      * Accepted values: boolean true or false
      */
-    'enable_username' => false,
+    'enable_username' => true,
 
     /**     
      * Authentication Adapters
@@ -154,7 +154,7 @@ $settings = array(
      * Accepted values: A valid route name within your application
      *
      */
-    'login_redirect_route' => 'admin/index/index',
+    'login_redirect_route' => 'application',
 
     /**
      * Logout Redirect Route
